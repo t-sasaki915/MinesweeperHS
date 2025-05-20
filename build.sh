@@ -2,8 +2,8 @@
 
 set -e
 
-wasm32-wasi-cabal update --project-file=cabal-wasm.project
-wasm32-wasi-cabal build --allow-newer --project-file=cabal-wasm.project
+wasm32-wasi-cabal update --project-file cabal-wasm.project
+wasm32-wasi-cabal build --allow-newer --project-file cabal-wasm.project
 
 mkdir -p build
 
