@@ -4,8 +4,9 @@
 module Main (main) where
 
 import           Miso
-import           Miso.String
 import           Control.Lens
+
+import           Textures     (closedCellTexture)
 
 newtype GameState = GameState
     { _counter :: Int
@@ -31,10 +32,16 @@ updateState IncreaseCount = do
     batch []
 
 renderHtml :: GameState -> View GameAction
-renderHtml state = div_ []
-    [ text $ ms (_counter state)
-    , button_ [ onClick IncreaseCount ] [ text "INCREASE" ]
-    ]
+renderHtml _ =
+    div_ [class_ "gameContainer"]
+        [ div_ [class_ "gameScreen"] $
+            flip map [1..9] $ const $
+                div_ [class_ "gameRow"] $
+                    flip map [1..9] $ const $
+                        div_ [class_ "gameCell"]
+                            [ closedCellTexture
+                            ]
+        ]
 
 main :: IO ()
 main = run  (startComponent mainComponent)

@@ -47,6 +47,7 @@ executable MinesweeperHS-exe
   main-is: Main.hs
   other-modules:
       Paths_MinesweeperHS
+      Textures
   autogen-modules:
       Paths_MinesweeperHS
   hs-source-dirs:
