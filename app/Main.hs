@@ -1,24 +1,17 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Main (main) where
 
 import           Miso
-import           Miso.Lens
 import           Miso.String
-
-main :: IO ()
-main = run  (startComponent mainComponent)
-
-#ifdef WASM
-foreign export javascript "hs_start" main :: IO ()
-#endif
+import           Control.Lens
 
 newtype GameState = GameState
     { _counter :: Int
     } deriving (Show, Eq)
 
-counter :: Lens GameState Int
-counter = lens _counter $ \record field -> record { _counter = field }
+makeLenses ''GameState
 
 data GameAction = IncreaseCount
     deriving (Show, Eq)
@@ -30,11 +23,22 @@ initState :: GameState
 initState = GameState 0
 
 updateState :: GameAction -> Effect GameState GameAction
-updateState = \case
-    IncreaseCount -> counter += 1
+updateState IncreaseCount = do
+    state <- get
+
+    put (over counter (+ 5) state)
+
+    batch []
 
 renderHtml :: GameState -> View GameAction
 renderHtml state = div_ []
-    [ text $ ms (state ^. counter)
+    [ text $ ms (_counter state)
     , button_ [ onClick IncreaseCount ] [ text "INCREASE" ]
     ]
+
+main :: IO ()
+main = run  (startComponent mainComponent)
+
+#ifdef WASM
+foreign export javascript "hs_start" main :: IO ()
+#endif
