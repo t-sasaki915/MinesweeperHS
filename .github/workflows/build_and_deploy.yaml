@@ -26,7 +26,9 @@ jobs:
           sudo apt update
           sudo apt install -y jq unzip zstd build-essential curl libffi-dev libffi8 libgmp-dev libgmp10 libncurses-dev libncurses6 libtinfo6
       - name: Setup wasm32-wasi-ghc
-        run: export FLAVOUR=9.10 && curl https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | sh
+        run: |
+          export FLAVOUR=9.10 && curl https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | sh
+          source ~/.ghc-wasm/env
       - name: Build
         run: |
           chmod +x build.sh
