@@ -1,0 +1,8 @@
+* {
+    font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace) !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}

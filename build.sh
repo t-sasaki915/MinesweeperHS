@@ -14,3 +14,4 @@ $(wasm32-wasi-ghc --print-libdir)/post-link.mjs \
 cp -v $(wasm32-wasi-cabal list-bin MinesweeperHS-exe --allow-newer) build
 cp -v index.html build
 cp -v index.js build
+cp -v index.css build
