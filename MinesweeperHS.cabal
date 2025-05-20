@@ -1,0 +1,66 @@
+cabal-version: 2.2
+
+name:           MinesweeperHS
+version:        1.0.0.0
+description:    Please see the README on GitHub at <https://github.com/t-sasaki915/MinesweeperHS#readme>
+homepage:       https://github.com/t-sasaki915/MinesweeperHS#readme
+bug-reports:    https://github.com/t-sasaki915/MinesweeperHS/issues
+author:         Toma Sasaki
+maintainer:     netst915@gmail.com
+copyright:      2025 Toma Sasaki
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/t-sasaki915/MinesweeperHS
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_MinesweeperHS
+  autogen-modules:
+      Paths_MinesweeperHS
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+  default-language: Haskell2010
+  default-extensions: LambdaCase, OverloadedStrings
+
+executable MinesweeperHS-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_MinesweeperHS
+  autogen-modules:
+      Paths_MinesweeperHS
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      MinesweeperHS
+    , base >=4.7 && <5
+    , yesod ==1.6.2.1
+  default-language: Haskell2010
+  default-extensions: LambdaCase, OverloadedStrings
+
+test-suite MinesweeperHS-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_MinesweeperHS
+  autogen-modules:
+      Paths_MinesweeperHS
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      MinesweeperHS
+    , base >=4.7 && <5
+  default-language: Haskell2010
+  default-extensions: LambdaCase, OverloadedStrings
