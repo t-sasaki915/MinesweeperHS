@@ -18,6 +18,15 @@ source-repository head
   type: git
   location: https://github.com/t-sasaki915/MinesweeperHS
 
+common wasm
+  if arch(wasm32)
+    ghc-options:
+      -no-hs-main
+      -optl-mexec-model=reactor
+      "-optl-Wl,--export=hs_start"
+    cpp-options:
+      -DWASM
+
 library
   exposed-modules:
       Lib
@@ -34,6 +43,7 @@ library
   default-extensions: LambdaCase, OverloadedStrings
 
 executable MinesweeperHS-exe
+  import: wasm
   main-is: Main.hs
   other-modules:
       Paths_MinesweeperHS
@@ -41,26 +51,10 @@ executable MinesweeperHS-exe
       Paths_MinesweeperHS
   hs-source-dirs:
       app
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       MinesweeperHS
     , base >=4.7 && <5
-    , yesod ==1.6.2.1
-  default-language: Haskell2010
-  default-extensions: LambdaCase, OverloadedStrings
-
-test-suite MinesweeperHS-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_MinesweeperHS
-  autogen-modules:
-      Paths_MinesweeperHS
-  hs-source-dirs:
-      test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      MinesweeperHS
-    , base >=4.7 && <5
+    , miso
   default-language: Haskell2010
   default-extensions: LambdaCase, OverloadedStrings
