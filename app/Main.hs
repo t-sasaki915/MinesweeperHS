@@ -1,46 +1,20 @@
-{-# LANGUAGE CPP             #-}
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE CPP #-}
 
 module Main (main) where
 
-import           Control.Lens
 import           Miso
 
-import           Textures     (Texture (..), Textures (..))
-
-newtype GameState = GameState
-    { _counter :: Int
-    } deriving (Show, Eq)
-
-makeLenses ''GameState
-
-data GameAction = IncreaseCount
-    deriving (Show, Eq)
+import           GameLogic  (updateGameState)
+import           GameScreen (renderGameScreen)
+import           GameState  (GameAction, GameState, initialGameState)
 
 mainComponent :: Component name GameState GameAction
-mainComponent = defaultComponent initState updateState renderHtml
-
-initState :: GameState
-initState = GameState 0
-
-updateState :: GameAction -> Effect GameState GameAction
-updateState IncreaseCount = do
-    state <- get
-
-    put (over counter (+ 5) state)
-
-    batch []
+mainComponent = defaultComponent initialGameState updateGameState renderHtml
 
 renderHtml :: GameState -> View GameAction
-renderHtml _ =
+renderHtml state =
     div_ [class_ "gameContainer"]
-        [ div_ [class_ "gameScreen"] $
-            flip map [1..9] $ const $
-                div_ [class_ "gameRow"] $
-                    flip map [1..9] $ const $
-                        div_ [class_ "gameCell"]
-                            [ textureSvg OpenedCellWithDigit8
-                            ]
+        [ renderGameScreen state
         ]
 
 main :: IO ()
