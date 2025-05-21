@@ -1,10 +1,10 @@
-{-# LANGUAGE CPP #-}
+{-# LANGUAGE CPP             #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module Main (main) where
 
-import           Miso
 import           Control.Lens
+import           Miso
 
 import           Textures     (Texture (..), Textures (..))
 
