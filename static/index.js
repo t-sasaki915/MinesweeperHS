@@ -19,4 +19,7 @@ const { instance } = await WebAssembly.instantiateStreaming(fetch("./Minesweeper
 Object.assign(instance_exports, instance.exports);
 
 wasi.initialize(instance);
+
+document.getElementById("loadingText").remove();
+
 await instance.exports.hs_start(globalThis.example);
