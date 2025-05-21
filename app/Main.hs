@@ -6,7 +6,7 @@ module Main (main) where
 import           Miso
 import           Control.Lens
 
-import           Textures     (closedCellTexture)
+import           Textures     (Texture (..), Textures (..))
 
 newtype GameState = GameState
     { _counter :: Int
@@ -39,7 +39,7 @@ renderHtml _ =
                 div_ [class_ "gameRow"] $
                     flip map [1..9] $ const $
                         div_ [class_ "gameCell"]
-                            [ closedCellTexture
+                            [ textureSvg ClosedCellWithFlag
                             ]
         ]
 

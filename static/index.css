@@ -11,13 +11,8 @@ body {
     display: inline-block;
     width: 32px;
     height: 32px;
-    margin: 0;
-    padding: 0;
-    background-color: #000000;
 }
 
 .gameRow {
-    margin: 0;
-    padding: 0;
     height: 32px;
 }
