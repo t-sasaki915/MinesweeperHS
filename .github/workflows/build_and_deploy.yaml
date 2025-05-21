@@ -29,11 +29,15 @@ jobs:
         run: export FLAVOUR=9.10 && curl https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | sh
       - name: Cache .cabal
         uses: actions/cache@v4.2.3
+        env:
+          cache-name: cache-cabal
         with:
-          path: ~/.cabal/store
-          key: ${{ matrix.ghc }}-cabal-${{ hashFiles('**/fallible.cabal') }}
+          path: ~/.ghc-wasm/.cabal/store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('cabal-wasm.project') }}
           restore-keys: |
-            ${{ matrix.ghc }}-cabal-
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
       - name: Build
         run: |
           source ~/.ghc-wasm/env
