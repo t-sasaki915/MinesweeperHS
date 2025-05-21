@@ -39,7 +39,7 @@ renderHtml _ =
                 div_ [class_ "gameRow"] $
                     flip map [1..9] $ const $
                         div_ [class_ "gameCell"]
-                            [ textureSvg ClosedCellWithFlag
+                            [ textureSvg OpenedCellWithDigit8
                             ]
         ]
 

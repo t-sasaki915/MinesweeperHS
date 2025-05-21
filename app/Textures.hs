@@ -19,6 +19,22 @@ data Textures = ClosedCell
               | Mine
               | OpenedCellWithMine
               | HypocentreCell
+              | Digit1
+              | Digit2
+              | Digit3
+              | Digit4
+              | Digit5
+              | Digit6
+              | Digit7
+              | Digit8
+              | OpenedCellWithDigit1
+              | OpenedCellWithDigit2
+              | OpenedCellWithDigit3
+              | OpenedCellWithDigit4
+              | OpenedCellWithDigit5
+              | OpenedCellWithDigit6
+              | OpenedCellWithDigit7
+              | OpenedCellWithDigit8
 
 instance Texture Textures where
     textureElements ClosedCell =
@@ -68,3 +84,89 @@ instance Texture Textures where
 
     textureElements HypocentreCell =
         [rect_ [fill_ "#FF0000", width_ "32", height_ "32", x_ "0", y_ "0"] []] ++ textureElements Mine
+
+    textureElements Digit1 =
+        [ rect_ [fill_ "#0000FF", width_ "4", height_ "24", x_ "14", y_ "4"] []
+        , rect_ [fill_ "#0000FF", width_ "5", height_ "4", x_ "9", y_ "7"] []
+        , rect_ [fill_ "#0000FF", width_ "16", height_ "4", x_ "8", y_ "24"] []
+        ]
+    
+    textureElements Digit2 =
+        [ rect_ [fill_ "#008000", width_ "4", height_ "14", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#008000", width_ "4", height_ "14", x_ "20", y_ "4"] []
+        , rect_ [fill_ "#008000", width_ "16", height_ "4", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#008000", width_ "16", height_ "4", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#008000", width_ "16", height_ "4", x_ "8", y_ "24"] []
+        ]
+    
+    textureElements Digit3 =
+        [ rect_ [fill_ "#FF0000", width_ "4", height_ "14", x_ "20", y_ "4"] []
+        , rect_ [fill_ "#FF0000", width_ "4", height_ "14", x_ "20", y_ "14"] []
+        , rect_ [fill_ "#FF0000", width_ "16", height_ "4", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#FF0000", width_ "16", height_ "4", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#FF0000", width_ "16", height_ "4", x_ "8", y_ "24"] []
+        ]
+
+    textureElements Digit4 =
+        [ rect_ [fill_ "#000080", width_ "4", height_ "14", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#000080", width_ "4", height_ "14", x_ "20", y_ "4"] []
+        , rect_ [fill_ "#000080", width_ "4", height_ "14", x_ "20", y_ "14"] []
+        , rect_ [fill_ "#000080", width_ "16", height_ "4", x_ "8", y_ "14"] []
+        ]
+    
+    textureElements Digit5 =
+        [ rect_ [fill_ "#800000", width_ "4", height_ "14", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#800000", width_ "4", height_ "14", x_ "20", y_ "14"] []
+        , rect_ [fill_ "#800000", width_ "16", height_ "4", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#800000", width_ "16", height_ "4", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#800000", width_ "16", height_ "4", x_ "8", y_ "24"] []
+        ]
+    
+    textureElements Digit6 =
+        [ rect_ [fill_ "#008080", width_ "4", height_ "14", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#008080", width_ "4", height_ "14", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#008080", width_ "4", height_ "14", x_ "20", y_ "14"] []
+        , rect_ [fill_ "#008080", width_ "16", height_ "4", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#008080", width_ "16", height_ "4", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#008080", width_ "16", height_ "4", x_ "8", y_ "24"] []
+        ]
+    
+    textureElements Digit7 =
+        [ rect_ [fill_ "#000000", width_ "4", height_ "14", x_ "20", y_ "4"] []
+        , rect_ [fill_ "#000000", width_ "4", height_ "14", x_ "20", y_ "14"] []
+        , rect_ [fill_ "#000000", width_ "16", height_ "4", x_ "8", y_ "4"] []
+        ]
+    
+    textureElements Digit8 =
+        [ rect_ [fill_ "#808080", width_ "4", height_ "14", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#808080", width_ "4", height_ "14", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#808080", width_ "4", height_ "14", x_ "20", y_ "4"] []
+        , rect_ [fill_ "#808080", width_ "4", height_ "14", x_ "20", y_ "14"] []
+        , rect_ [fill_ "#808080", width_ "16", height_ "4", x_ "8", y_ "4"] []
+        , rect_ [fill_ "#808080", width_ "16", height_ "4", x_ "8", y_ "14"] []
+        , rect_ [fill_ "#808080", width_ "16", height_ "4", x_ "8", y_ "24"] []
+        ]
+    
+    textureElements OpenedCellWithDigit1 =
+        textureElements OpenedCell ++ textureElements Digit1
+    
+    textureElements OpenedCellWithDigit2 =
+        textureElements OpenedCell ++ textureElements Digit2
+    
+    textureElements OpenedCellWithDigit3 =
+        textureElements OpenedCell ++ textureElements Digit3
+    
+    textureElements OpenedCellWithDigit4 =
+        textureElements OpenedCell ++ textureElements Digit4
+    
+    textureElements OpenedCellWithDigit5 =
+        textureElements OpenedCell ++ textureElements Digit5
+    
+    textureElements OpenedCellWithDigit6 =
+        textureElements OpenedCell ++ textureElements Digit6
+    
+    textureElements OpenedCellWithDigit7 =
+        textureElements OpenedCell ++ textureElements Digit7
+    
+    textureElements OpenedCellWithDigit8 =
+        textureElements OpenedCell ++ textureElements Digit8
