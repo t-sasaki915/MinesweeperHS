@@ -27,6 +27,13 @@ jobs:
           sudo apt install -y jq unzip zstd build-essential curl libffi-dev libffi8 libgmp-dev libgmp10 libncurses-dev libncurses6 libtinfo6
       - name: Setup wasm32-wasi-ghc
         run: export FLAVOUR=9.10 && curl https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | sh
+      - name: Cache .cabal
+        uses: actions/cache@v4.2.3
+        with:
+          path: ~/.cabal/store
+          key: ${{ matrix.ghc }}-cabal-${{ hashFiles('**/fallible.cabal') }}
+          restore-keys: |
+            ${{ matrix.ghc }}-cabal-
       - name: Build
         run: |
           source ~/.ghc-wasm/env
