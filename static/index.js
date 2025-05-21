@@ -5,8 +5,8 @@ const args = [];
 const env = ["GHCRTS=-H64m"];
 const fds = [
     new OpenFile(new File([])), // stdin
-    ConsoleStdout.lineBuffered((msg) => console.log(`[WASI stdout] ''${msg}`)),
-    ConsoleStdout.lineBuffered((msg) => console.warn(`[WASI stderr] ''${msg}`)),
+    ConsoleStdout.lineBuffered((msg) => console.log(`[WASI stdout] ${msg}`)),
+    ConsoleStdout.lineBuffered((msg) => console.warn(`[WASI stderr] ${msg}`)),
 ];
 const options = { debug: false };
 const wasi = new WASI(args, env, fds, options);

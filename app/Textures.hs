@@ -4,13 +4,13 @@ import           Miso        (View)
 import           Miso.Mathml (xmlns_)
 import           Miso.Svg
 
-class Texture a where
+class Textures a where
     textureElements :: a -> [View x]
 
     textureSvg :: a -> View x
     textureSvg = svg_ [width_ "32", height_ "32", xmlns_ "http://www.w3.org/2000/svg"] . textureElements
 
-data Textures = ClosedCell
+data Texture = ClosedCell
               | OpenedCell
               | Flag
               | FlagPlaceholder
@@ -36,7 +36,7 @@ data Textures = ClosedCell
               | OpenedCellWithDigit7
               | OpenedCellWithDigit8
 
-instance Texture Textures where
+instance Textures Texture where
     textureElements ClosedCell =
         [ rect_ [fill_ "#C0C0C0", width_ "32", height_ "32", x_ "0", y_ "0"] []
         , path_ [fill_ "#808080", d_ "M 32,0 26,6 26,32 32,32"] []
