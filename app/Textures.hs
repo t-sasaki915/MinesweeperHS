@@ -1,14 +1,13 @@
 module Textures (Texture (..), Textures (..)) where
 
-import           Miso        (View)
-import           Miso.Mathml (xmlns_)
+import           Miso     (View)
 import           Miso.Svg
 
 class Textures a where
     textureElements :: a -> [View x]
 
     textureSvg :: a -> View x
-    textureSvg = svg_ [width_ "32", height_ "32", xmlns_ "http://www.w3.org/2000/svg"] . textureElements
+    textureSvg = svg_ [width_ "32", height_ "32"] . textureElements
 
 data Texture = ClosedCell
               | OpenedCell
