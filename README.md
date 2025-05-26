@@ -1,2 +1,2 @@
 # MinesweeperHS
-Minesweeper written with Haskell &amp; miso
+Minesweeper written with Haskell &amp; ghcjs

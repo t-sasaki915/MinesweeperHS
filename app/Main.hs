@@ -2,9 +2,10 @@
 
 module Main (main) where
 
-main :: IO ()
-main = putStrLn "AAA"
+import           GHC.JS.Prim
 
-#ifdef WASM
-foreign export javascript "hs_start" main :: IO ()
-#endif
+foreign import javascript "((message) => console.log(message))"
+    consoleLog :: JSVal -> IO ()
+
+main :: IO ()
+main = consoleLog (toJSString "TEST")
