@@ -1,11 +1,5 @@
 resolver: nightly-2025-05-20
-compiler: ghc-9.10.1
+compiler: ghc-9.12.2
 
 packages:
 - .
-
-extra-deps:
-- git: https://github.com/dmjio/miso
-  commit: 2813cf4581792a93bdd3211b935a0e8bbe60a107
-
-- jsaddle-warp-0.9.9.2

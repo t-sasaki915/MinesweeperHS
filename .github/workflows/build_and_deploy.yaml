@@ -25,29 +25,40 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential
-      - name: Setup wasm32-wasi-ghc
-        run: export FLAVOUR=9.10 && curl https://gitlab.haskell.org/haskell-wasm/ghc-wasm-meta/-/raw/master/bootstrap.sh | sh
+      - name: Setup ghcup
+        run: |
+          export BOOTSTRAP_HASKELL_NONINTERACTIVE=1
+          export BOOTSTRAP_HASKELL_MINIMAL=1
+          curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+      - name: Install build tools
+        run: |
+          source ~/.ghcup/env
+          ghcup install cabal 3.14.2.0
+
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd emsdk
+          ./emsdk install 3.1.74
+          ./emsdk activate 3.1.74
+          source ./emsdk_env.sh
+
+          ghcup config add-release-channel cross
+          emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2
       - name: Cache .cabal
         uses: actions/cache@v4.2.3
         env:
           cache-name: cache-cabal
         with:
-          path: ~/.ghc-wasm/.cabal/store
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('cabal-wasm.project') }}
+          path: ~/.cabal/store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/*.cabal') }}-${{ hashFiles('cabal-js.project') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - name: Build
         run: |
-          source ~/.ghc-wasm/env
+          source ~/.ghcup/env
           chmod +x build.sh
           ./build.sh
-      - name: Minify
-        run: |
-          npm install -g csso-cli minify
-          chmod +x minify.sh
-          ./minify.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
