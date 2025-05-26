@@ -1,0 +1,18 @@
+html:after {
+    content: "";
+    background-image: url("images/ClosedCell.svg")
+                    , url("images/Digit1.svg")
+                    , url("images/Digit2.svg")
+                    , url("images/Digit3.svg")
+                    , url("images/Digit4.svg")
+                    , url("images/Digit5.svg")
+                    , url("images/Digit6.svg")
+                    , url("images/Digit7.svg")
+                    , url("images/Digit8.svg")
+                    , url("images/Flag.svg")
+                    , url("images/FlagPlaceholder.svg")
+                    , url("images/HypocentreCell.svg")
+                    , url("images/Mine.svg")
+                    , url("images/OpenedCell.svg")
+                    ;
+}
