@@ -43,6 +43,11 @@ jobs:
           source ~/.ghc-wasm/env
           chmod +x build.sh
           ./build.sh
+      - name: Minify
+        run: |
+          npm install -g csso-cli minify
+          chmod +x minify.sh
+          ./minify.sh
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
