@@ -1,29 +1,26 @@
 module GameLogic (updateGameState) where
 
-import           Control.Lens            (set, (^.))
 import           Control.Monad.IO.Class  (liftIO)
-import           Control.Monad.State     (get, put)
 import           Data.Functor            ((<&>))
-import           Miso                    (Effect, io, io_)
+import           Miso                    (Effect, get, io, io_, put)
 import           Text.Printf             (printf)
 
 import           GameLogic.MineGenerator (generateMines)
 import           GameState
+import           GameState.Difficulty    (Difficulty)
 
-updateGameState :: GameAction -> Effect GameState GameAction
-updateGameState (CellClicked clickedCell) = do
-    state <- get
-
-    case state ^. isGameStarted of
-        True ->
-            return ()
-
-        False -> do
-            put $ set isGameStarted True state
-
+updateGameState :: Difficulty -> GameAction -> Effect GameState GameAction
+updateGameState difficulty (CellClicked clickedCell) = do
+    get >>= \case
+        NotStarted -> do
             io_ $ liftIO $ putStrLn (printf "Game started. First cell: %s" (show clickedCell))
 
-            io $ liftIO $ generateMines clickedCell state <&> UpdateMines
+            io $ liftIO $ generateMines clickedCell difficulty <&> UpdateMines
 
-updateGameState (UpdateMines generatedMines) =
-    get >>= put . set cellsWithMine generatedMines
+        state@GameStarted {} -> do
+            io_ $ liftIO $ putStrLn (printf "Cell clicked: %s" (show clickedCell))
+
+updateGameState _ (UpdateMines generatedMines) =
+    put $ GameStarted
+        { cellsWithMine = generatedMines
+        }

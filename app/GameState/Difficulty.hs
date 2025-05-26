@@ -6,10 +6,10 @@ class Difficulties a where
     numberOfMines :: a -> Int
 
 data Difficulty = Easy
-                  | Intermediate
-                  | Difficult
-                  | Impossible
-                  deriving (Show, Eq)
+                | Intermediate
+                | Difficult
+                | Impossible
+                deriving (Show, Eq)
 
 instance Difficulties Difficulty where
     width Easy         = 9

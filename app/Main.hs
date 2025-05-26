@@ -4,17 +4,18 @@ module Main (main) where
 
 import           Miso
 
-import           GameLogic  (updateGameState)
-import           GameScreen (renderGameScreen)
-import           GameState  (GameAction, GameState, initialGameState)
+import           GameLogic            (updateGameState)
+import           GameScreen           (renderGameScreen)
+import           GameState            (GameAction, GameState, initialGameState)
+import           GameState.Difficulty (Difficulty (Easy))
 
 mainComponent :: Component name GameState GameAction
-mainComponent = defaultComponent initialGameState updateGameState renderHtml
+mainComponent = defaultComponent initialGameState (updateGameState Easy) (renderHtml Easy)
 
-renderHtml :: GameState -> View GameAction
-renderHtml state =
+renderHtml :: Difficulty -> GameState -> View GameAction
+renderHtml difficulty state =
     div_ [class_ "gameContainer"]
-        [ renderGameScreen state
+        [ renderGameScreen difficulty state
         ]
 
 main :: IO ()

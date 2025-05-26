@@ -1,6 +1,7 @@
 module GameLogic.MineGenerator (generateMines) where
 
 import           GameState
+import           GameState.Difficulty (Difficulty)
 
-generateMines :: Cell -> GameState -> IO [Cell]
-generateMines firstCell state = return [firstCell]
+generateMines :: Cell -> Difficulty -> IO [Cell]
+generateMines firstCell difficulty = return [firstCell]

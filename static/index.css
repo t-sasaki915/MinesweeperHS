@@ -6,13 +6,3 @@ body {
     margin: 0 !important;
     padding: 0 !important;
 }
-
-.gameCell {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-}
-
-.gameRow {
-    height: 32px;
-}

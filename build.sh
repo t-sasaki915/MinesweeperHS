@@ -13,7 +13,7 @@ $(wasm32-wasi-ghc --print-libdir)/post-link.mjs \
 
 cp -v $(wasm32-wasi-cabal list-bin MinesweeperHS-exe --allow-newer) build
 
-cp -v static/* build
+cp -v -r static/* build
 
 echo ""
 echo BUILD SUCCESSFUL.

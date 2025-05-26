@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -Wno-partial-fields #-}
 
 module GameState
     ( Cell (..)
@@ -7,15 +7,8 @@ module GameState
     , initialGameState
     , cellX
     , cellY
-    , difficulty
-    , isGameStarted
-    , cellsWithMine
     , hasCellMine
     ) where
-
-import           Control.Lens         (makeLenses, (^.))
-
-import           GameState.Difficulty (Difficulty (Easy))
 
 data Cell = Cell Int Int deriving (Show, Eq)
 
@@ -25,25 +18,19 @@ cellX (Cell x _) = x
 cellY :: Cell -> Int
 cellY (Cell _ y) = y
 
-data GameState = GameState
-    { _difficulty    :: Difficulty
-    , _isGameStarted :: Bool
-    , _cellsWithMine :: [Cell]
-    }
+data GameState = NotStarted
+               | GameStarted
+                    { cellsWithMine :: [Cell]
+                    }
     deriving (Show, Eq)
-
-makeLenses ''GameState
 
 data GameAction = CellClicked Cell
                 | UpdateMines [Cell]
     deriving (Show, Eq)
 
 initialGameState :: GameState
-initialGameState = GameState
-    { _difficulty    = Easy
-    , _isGameStarted = False
-    , _cellsWithMine = []
-    }
+initialGameState = NotStarted
 
 hasCellMine :: Cell -> GameState -> Bool
-hasCellMine cell state = cell `elem` state ^. cellsWithMine
+hasCellMine cell state@GameStarted {} = cell `elem` cellsWithMine state
+hasCellMine _    NotStarted           = False
