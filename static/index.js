@@ -2,7 +2,7 @@ import { WASI, OpenFile, File, ConsoleStdout } from "https://cdn.jsdelivr.net/np
 import ghc_wasm_jsffi from "./ghc_wasm_jsffi.js";
 
 const args = [];
-const env = ["GHCRTS=-H64m"];
+const env = [];
 const fds = [
     new OpenFile(new File([])), // stdin
     ConsoleStdout.lineBuffered((msg) => console.log(`[WASI stdout] ${msg}`)),
@@ -22,4 +22,4 @@ wasi.initialize(instance);
 
 document.getElementById("loadingText").remove();
 
-await instance.exports.hs_start(globalThis.example);
+await instance.exports.hs_start();
