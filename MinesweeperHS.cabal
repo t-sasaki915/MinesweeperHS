@@ -37,7 +37,6 @@ executable MinesweeperHS-exe
       GameLogic
       GameScreen
       GameState
-      Textures
   autogen-modules:
       Paths_MinesweeperHS
   hs-source-dirs:

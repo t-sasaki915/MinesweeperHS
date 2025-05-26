@@ -6,3 +6,69 @@ body {
     margin: 0 !important;
     padding: 0 !important;
 }
+
+.gameRow {
+    height: 32px;
+}
+
+.gameCell {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+}
+
+.closedCell {
+    background-image: url("images/ClosedCell.svg");
+}
+
+.openedCell {
+    background-image: url("images/OpenedCell.svg");
+}
+
+.closedCellWithFlag {
+    background-image: url("images/Flag.svg"), url("images/ClosedCell.svg");
+}
+
+.closedCellWithFlagPlaceholder {
+    background-image: url("images/FlagPlaceholder.svg"), url("images/ClosedCell.svg");
+}
+
+.openedCellWithMine {
+    background-image: url("images/Mine.svg"), url("images/OpenedCell.svg");
+}
+
+.hypocentreCell {
+    background-image: url("images/Mine.svg"), url("images/HypocentreCell.svg");
+}
+
+.openedCellWithDigit1 {
+    background-image: url("images/Digit1.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit2 {
+    background-image: url("images/Digit2.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit3 {
+    background-image: url("images/Digit3.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit4 {
+    background-image: url("images/Digit4.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit5 {
+    background-image: url("images/Digit5.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit6 {
+    background-image: url("images/Digit6.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit7 {
+    background-image: url("images/Digit7.svg"), url("images/OpenedCell.svg");
+}
+
+.openedCellWithDigit8 {
+    background-image: url("images/Digit8.svg"), url("images/OpenedCell.svg");
+}
