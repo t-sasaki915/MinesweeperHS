@@ -5,7 +5,7 @@ module Main (main) where
 import           Control.Lens                     (makeLenses, over, (^.))
 import           Control.Monad                    (forM_, mzero)
 import           Control.Monad.Trans.Class        (lift)
-import           Control.Monad.Trans.State.Strict (StateT, execStateT, get, put)
+import           Control.Monad.Trans.State.Strict (StateT, get, put)
 import           Data.Aeson                       (FromJSON (..), ToJSON (..),
                                                    Value (..), object, (.:),
                                                    (.=))
@@ -16,7 +16,7 @@ import           Text.Printf                      (printf)
 
 data Cell = Cell Int Int deriving (Show, Eq)
 
-data GameState = GameState
+newtype GameState = GameState
     { _counter :: Int
     } deriving Show
 

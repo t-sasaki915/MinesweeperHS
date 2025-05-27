@@ -22,11 +22,9 @@ library
   exposed-modules:
       Language.JavaScript.Framework.Internal.Foreign
       Language.JavaScript.Framework.AppState
-      Language.JavaScript.Framework.WrappedForeignFunction
       Language.JavaScript.Wrapper.Internal.Foreign
       Language.JavaScript.Wrapper.ElementWrapper
       Language.JavaScript.Wrapper.EventWrapper
-      Language.JavaScript.Wrapper.WrappedForeignFunction
       Language.JavaScript.Framework
       Language.JavaScript.Wrapper
   other-modules:

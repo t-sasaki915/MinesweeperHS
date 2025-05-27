@@ -13,4 +13,3 @@ module Language.JavaScript.Wrapper
 
 import           Language.JavaScript.Wrapper.ElementWrapper
 import           Language.JavaScript.Wrapper.EventWrapper
-import           Language.JavaScript.Wrapper.WrappedForeignFunction
