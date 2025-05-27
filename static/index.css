@@ -7,6 +7,13 @@ body {
     padding: 0 !important;
 }
 
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
 .gameRow {
     height: 32px;
 }

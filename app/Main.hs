@@ -6,7 +6,8 @@ import           Language.JavaScript.Wrapper   (getURLSearchParam)
 import           Data.Maybe                    (fromMaybe)
 import           GameDifficulty                (defaultGameDifficulty,
                                                 gameDifficultyFromText)
-import           GameScreen                    (renderGameScreen)
+import           GameScreen                    (renderDifficultySelector,
+                                                renderGameScreen)
 import           GameState                     (initialGameState)
 
 main :: IO ()
@@ -20,3 +21,4 @@ main = do
     initialiseAppState (initialGameState difficulty)
 
     renderGameScreen difficulty
+    renderDifficultySelector difficulty

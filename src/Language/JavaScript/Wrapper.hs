@@ -4,8 +4,12 @@ module Language.JavaScript.Wrapper
     , EventType (..)
     , consoleLog
     , createElement
+    , createTextNode
     , setElementId
     , setElementClassName
+    , setElementInnerHtml
+    , setElementValue
+    , setIsElementSelected
     , appendChild
     , getElementById
     , addEventListener

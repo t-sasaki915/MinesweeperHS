@@ -1,5 +1,6 @@
 module GameDifficulty
     ( GameDifficulty (..)
+    , allDifficulties
     , defaultGameDifficulty
     , gameDifficultyFromText
     , screenWidth
@@ -31,6 +32,14 @@ instance FromJSON GameDifficulty where
     parseJSON (String "Impossible")   = return Impossible
 
     parseJSON _                       = mzero
+
+allDifficulties :: [GameDifficulty]
+allDifficulties =
+    [ Easy
+    , Intermediate
+    , Hard
+    , Impossible
+    ]
 
 defaultGameDifficulty :: GameDifficulty
 defaultGameDifficulty = Easy

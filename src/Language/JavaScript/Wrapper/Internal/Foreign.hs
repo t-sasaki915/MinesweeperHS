@@ -1,8 +1,12 @@
 module Language.JavaScript.Wrapper.Internal.Foreign
     ( consoleLog_
     , createElement_
+    , createTextNode_
     , setElementId_
     , setElementClassName_
+    , setElementInnerHtml_
+    , setElementValue_
+    , setIsElementSelected_
     , appendChild_
     , getElementById_
     , addEventListener_
@@ -18,11 +22,23 @@ foreign import javascript "((message) => console.log(message))"
 foreign import javascript "((elementTypeName) => document.createElement(elementTypeName))"
     createElement_ :: JSVal -> IO JSVal
 
+foreign import javascript "((text) => document.createTextNode(text))"
+    createTextNode_ :: JSVal -> IO JSVal
+
 foreign import javascript "((newId, element) => element.id = newId)"
     setElementId_ :: JSVal -> JSVal -> IO ()
 
 foreign import javascript "((newClassName, element) => element.className = newClassName)"
     setElementClassName_ :: JSVal -> JSVal -> IO ()
+
+foreign import javascript "((newInner, element) => element.innerHTML = newInner)"
+    setElementInnerHtml_ :: JSVal -> JSVal -> IO ()
+
+foreign import javascript "((newValue, element) => element.value = newValue)"
+    setElementValue_ :: JSVal -> JSVal -> IO ()
+
+foreign import javascript "((newIsSelected, element) => element.selected = newIsSelected)"
+    setIsElementSelected_ :: JSVal -> JSVal -> IO ()
 
 foreign import javascript "((parent, child) => parent.appendChild(child))"
     appendChild_ :: JSVal -> JSVal -> IO ()
