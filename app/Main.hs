@@ -1,51 +1,24 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Main (main) where
 
-import           Control.Lens                  (makeLenses, over)
-import           Data.Aeson                    (FromJSON (..), ToJSON (..),
-                                                Value (..), object, (.:), (.=))
-import qualified Data.Text                     as Text
-import           Language.JavaScript.Framework
+import           Control.Monad               (forM_)
+import qualified Data.Text                   as Text
 import           Language.JavaScript.Wrapper
-
-data GameState = GameState
-    { _counter :: Int
-    } deriving Show
-
-instance ToJSON GameState where
-    toJSON (GameState counter) = object
-        [ "counter" .= counter
-        ]
-
-instance FromJSON GameState where
-    parseJSON (Object v) = GameState <$> (v .: "counter")
-
-    parseJSON _          = fail "Failed to parse GameState."
-
-instance AppState GameState
-
-makeLenses ''GameState
+import           Text.Printf                 (printf)
 
 main :: IO ()
 main = do
-    initialiseAppState (GameState { _counter = 0 })
-
     gameContainer <- getElementById "gameContainer"
 
-    element <- createElement Div
-    setElementId "asdf" element
-    setElementClassName "gameCell closedCell" element
-    addEventListener Click onGameCellClicked element
+    forM_ [1..9] $ \y -> do
+        rowElem <- createElement Div
+        setElementClassName "gameRow" rowElem
 
-    appendChild gameContainer element
+        forM_ [1..9] $ \x -> do
+            cellElem <- createElement Div
 
-    consoleLog "TEST"
+            setElementId (Text.pack $ printf "gameCell_%d_%d" x y) cellElem
+            setElementClassName "gameCell closedCell" cellElem
 
-onGameCellClicked :: IO ()
-onGameCellClicked = do
-    gameState <- getAppState
+            appendChild rowElem cellElem
 
-    consoleLog (Text.show gameState)
-
-    setAppState (over counter (+ 1) gameState)
+        appendChild gameContainer rowElem
