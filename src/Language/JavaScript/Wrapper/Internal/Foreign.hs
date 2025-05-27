@@ -6,7 +6,7 @@ module Language.JavaScript.Wrapper.Internal.Foreign
     , appendChildToBody_
     ) where
 
-import           GHC.JS.Prim
+import           GHC.JS.Prim (JSVal)
 
 foreign import javascript "((message) => console.log(message))"
     consoleLog_ :: JSVal -> IO ()
