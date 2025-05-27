@@ -1,23 +1,7 @@
-{-# LANGUAGE CPP #-}
-
 module Main (main) where
 
-import           GHC.JS.Prim
-
-foreign import javascript "((message) => console.log(message))"
-    consoleLog :: JSVal -> IO ()
-
-foreign import javascript "((elementName) => document.createElement(elementName))"
-    createElement :: JSVal -> IO JSVal
-
-foreign import javascript "((element, newId) => element.id = newId)"
-    setElementId :: JSVal -> JSVal -> IO ()
-
-foreign import javascript "((element, newClasses) => element.className = newClasses)"
-    setElementClasses :: JSVal -> JSVal -> IO ()
-
-foreign import javascript "((element) => document.body.appendChild(element))"
-    appendChildToDocument :: JSVal -> IO ()
+import           GHC.JS.Prim                 (toJSString)
+import           Language.JavaScript.Foreign
 
 main :: IO ()
 main = do
@@ -25,6 +9,6 @@ main = do
     setElementId element (toJSString "asdf")
     setElementClasses element (toJSString "gameCell closedCell")
 
-    appendChildToDocument element
+    appendChildToBody element
 
     consoleLog (toJSString "TEST")
