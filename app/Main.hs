@@ -1,45 +1,20 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Main (main) where
 
-import           Control.Lens                     (makeLenses, over, (^.))
-import           Control.Monad                    (forM_, mzero)
+import           Control.Lens                     (set, (^.))
+import           Control.Monad                    (forM_)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
-import           Data.Aeson                       (FromJSON (..), ToJSON (..),
-                                                   Value (..), object, (.:),
-                                                   (.=))
-import qualified Data.Text                        as Text
+import           Data.Text                        (pack)
 import           Language.JavaScript.Framework
 import           Language.JavaScript.Wrapper
 import           Text.Printf                      (printf)
 
-data Cell = Cell Int Int deriving (Show, Eq)
-
-newtype GameState = GameState
-    { _counter :: Int
-    } deriving Show
-
-makeLenses ''GameState
-
-instance ToJSON GameState where
-    toJSON gameState =
-        object
-            [ "counter" .= (gameState ^. counter)
-            ]
-
-instance FromJSON GameState where
-    parseJSON (Object v) =
-        GameState
-            <$> v .: "counter"
-
-    parseJSON _ = mzero
-
-instance AppState GameState
+import           GameCell
+import           GameState
 
 main :: IO ()
 main = do
-    initialiseAppState (GameState { _counter = 0 })
+    initialiseAppState initialGameState
 
     gameContainer <- getElementById "gameContainer"
 
@@ -48,20 +23,28 @@ main = do
         setElementClassName "gameRow" rowElem
 
         forM_ [1..9] $ \x -> do
-            let cell = Cell x y
+            let gameCell = GameCell x y
 
             cellElem <- createElement Div
 
-            setElementId (Text.pack $ printf "gameCell_%d_%d" x y) cellElem
+            setElementId (pack $ printf "gameCell_%d_%d" x y) cellElem
             setElementClassName "gameCell closedCell" cellElem
-            addEventListenerWithState Click (onGameCellClicked cell) cellElem
+            addEventListenerWithState Click (onGameCellClicked gameCell) cellElem
 
             appendChild rowElem cellElem
 
         appendChild gameContainer rowElem
 
-onGameCellClicked :: Cell -> StateT GameState IO ()
+onGameCellClicked :: GameCell -> StateT GameState IO ()
 onGameCellClicked clickedCell = do
-    lift $ consoleLog (Text.show clickedCell)
+    state <- get
 
-    get >>= put . over counter (+ 1)
+    if state ^. isGameStarted then
+        lift $ consoleLog (pack $ printf "Cell clicked: %s" (show clickedCell))
+
+    else do
+        lift $ consoleLog (pack $ printf "Game started. First cell: %s" (show clickedCell))
+
+        put $
+            set isGameStarted True $
+                set firstGameCell (Just clickedCell) state

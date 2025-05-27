@@ -46,6 +46,8 @@ executable MinesweeperHS-exe
   main-is: Main.hs
   other-modules:
       Paths_MinesweeperHS
+      GameCell
+      GameState
   autogen-modules:
       Paths_MinesweeperHS
   hs-source-dirs:
