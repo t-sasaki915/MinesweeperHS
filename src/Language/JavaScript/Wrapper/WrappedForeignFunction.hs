@@ -3,7 +3,8 @@ module Language.JavaScript.Wrapper.WrappedForeignFunction
     , createElement
     , setElementId
     , setElementClassName
-    , appendChildToBody
+    , appendChild
+    , getElementById
     ) where
 
 import           Data.Functor                                 ((<&>))
@@ -26,5 +27,8 @@ setElementId newId (Element element) = setElementId_ (toJSString $ unpack newId)
 setElementClassName :: Text -> Element -> IO ()
 setElementClassName newClassName (Element element) = setElementClassName_ (toJSString $ unpack newClassName) element
 
-appendChildToBody :: Element -> IO ()
-appendChildToBody (Element element) = appendChildToBody_ element
+appendChild :: Element -> Element -> IO ()
+appendChild (Element parent) (Element child) = appendChild_ parent child
+
+getElementById :: Text -> IO Element
+getElementById elementId = getElementById_ (toJSString $ unpack elementId) <&> Element

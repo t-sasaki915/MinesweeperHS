@@ -3,7 +3,8 @@ module Language.JavaScript.Wrapper.Internal.Foreign
     , createElement_
     , setElementId_
     , setElementClassName_
-    , appendChildToBody_
+    , appendChild_
+    , getElementById_
     ) where
 
 import           GHC.JS.Prim (JSVal)
@@ -20,5 +21,8 @@ foreign import javascript "((newId, element) => element.id = newId)"
 foreign import javascript "((newClassName, element) => element.className = newClassName)"
     setElementClassName_ :: JSVal -> JSVal -> IO ()
 
-foreign import javascript "((element) => document.body.appendChild(element))"
-    appendChildToBody_ :: JSVal -> IO ()
+foreign import javascript "((parent, child) => parent.appendChild(child))"
+    appendChild_ :: JSVal -> JSVal -> IO ()
+
+foreign import javascript "((elementId) => document.getElementById(elementId))"
+    getElementById_ :: JSVal -> IO JSVal

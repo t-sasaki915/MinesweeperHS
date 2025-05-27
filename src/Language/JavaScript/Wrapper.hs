@@ -5,7 +5,8 @@ module Language.JavaScript.Wrapper
     , createElement
     , setElementId
     , setElementClassName
-    , appendChildToBody
+    , appendChild
+    , getElementById
     ) where
 
 import           Language.JavaScript.Wrapper.ElementWrapper
