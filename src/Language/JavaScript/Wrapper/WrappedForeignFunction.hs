@@ -5,12 +5,18 @@ module Language.JavaScript.Wrapper.WrappedForeignFunction
     , appendChild
     , getElementById
     , addEventListener
+    , addEventListenerWithState
     ) where
 
+import           Control.Monad.Trans.State.Strict             (StateT,
+                                                               execStateT)
 import           Data.Functor                                 ((<&>))
 import           Data.Text                                    (Text, unpack)
 import           GHC.JS.Foreign.Callback                      (asyncCallback)
 import           GHC.JS.Prim                                  (toJSString)
+import           Language.JavaScript.Framework                (AppState,
+                                                               getAppState,
+                                                               setAppState)
 import           Language.JavaScript.Wrapper.ElementWrapper   (Element (..),
                                                                ElementType,
                                                                elementTypeName)
@@ -38,3 +44,9 @@ addEventListener :: EventType -> IO () -> Element -> IO ()
 addEventListener eventType listener (Element element) =
     asyncCallback listener >>= \callback ->
         addEventListener_ (eventTypeName eventType) callback element
+
+addEventListenerWithState :: AppState a => EventType -> StateT a IO () -> Element -> IO ()
+addEventListenerWithState eventType stateListener element =
+    let listener = getAppState >>= execStateT stateListener >>= setAppState in
+        addEventListener eventType listener element
+

@@ -8,6 +8,7 @@ module Language.JavaScript.Wrapper
     , appendChild
     , getElementById
     , addEventListener
+    , addEventListenerWithState
     ) where
 
 import           Language.JavaScript.Wrapper.ElementWrapper
