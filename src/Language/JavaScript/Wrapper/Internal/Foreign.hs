@@ -1,14 +1,19 @@
 module Language.JavaScript.Wrapper.Internal.Foreign
-    ( createElement_
+    ( consoleLog_
+    , createElement_
     , setElementId_
     , setElementClassName_
     , appendChild_
     , getElementById_
     , addEventListener_
+    , getURLSearchParam_
     ) where
 
 import           GHC.JS.Foreign.Callback (Callback)
 import           GHC.JS.Prim             (JSVal)
+
+foreign import javascript "((message) => console.log(message))"
+    consoleLog_ :: JSVal -> IO ()
 
 foreign import javascript "((elementTypeName) => document.createElement(elementTypeName))"
     createElement_ :: JSVal -> IO JSVal
@@ -27,3 +32,6 @@ foreign import javascript "((elementId) => document.getElementById(elementId))"
 
 foreign import javascript "((eventType, listener, element) => element.addEventListener(eventType, listener))"
     addEventListener_ :: JSVal -> Callback (IO ()) -> JSVal -> IO ()
+
+foreign import javascript "((paramName) => new URLSearchParams(document.location.search).get(paramName))"
+    getURLSearchParam_ :: JSVal -> IO JSVal

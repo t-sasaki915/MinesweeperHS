@@ -4,7 +4,7 @@ import           Control.Lens                     (set, (^.))
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
 import           Data.Text                        (pack)
-import           Language.JavaScript.Framework    (consoleLog)
+import           Language.JavaScript.Wrapper      (consoleLog)
 import           Text.Printf                      (printf)
 
 import           GameCell                         (GameCell (..))

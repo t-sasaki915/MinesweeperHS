@@ -1,5 +1,7 @@
 module GameDifficulty
     ( GameDifficulty (..)
+    , defaultGameDifficulty
+    , gameDifficultyFromText
     , screenWidth
     , screenHeight
     , numberOfMines
@@ -7,6 +9,8 @@ module GameDifficulty
 
 import           Control.Monad (mzero)
 import           Data.Aeson    (FromJSON (..), ToJSON (..), Value (..))
+import           Data.Text     (Text)
+import qualified Data.Text     as Text
 
 data GameDifficulty = Easy
                     | Intermediate
@@ -27,6 +31,18 @@ instance FromJSON GameDifficulty where
     parseJSON (String "Impossible")   = return Impossible
 
     parseJSON _                       = mzero
+
+defaultGameDifficulty :: GameDifficulty
+defaultGameDifficulty = Easy
+
+gameDifficultyFromText :: Text -> Maybe GameDifficulty
+gameDifficultyFromText txt =
+    case Text.toLower txt of
+        "easy"         -> Just Easy
+        "intermediate" -> Just Intermediate
+        "hard"         -> Just Hard
+        "impossible"   -> Just Impossible
+        _              -> Nothing
 
 screenWidth :: GameDifficulty -> Int
 screenWidth Easy         = 9

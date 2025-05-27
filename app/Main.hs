@@ -1,14 +1,21 @@
 module Main (main) where
 
 import           Language.JavaScript.Framework (initialiseAppState)
+import           Language.JavaScript.Wrapper   (getURLSearchParam)
 
-import           GameDifficulty                (GameDifficulty (..))
+import           Data.Maybe                    (fromMaybe)
+import           GameDifficulty                (defaultGameDifficulty,
+                                                gameDifficultyFromText)
 import           GameScreen                    (renderGameScreen)
 import           GameState                     (initialGameState)
 
 main :: IO ()
 main = do
-    let difficulty = Hard
+    difficulty <-
+        getURLSearchParam "difficulty" >>= \case
+            Nothing -> return defaultGameDifficulty
+            Just txt ->
+                return $ fromMaybe defaultGameDifficulty (gameDifficultyFromText txt)
 
     initialiseAppState (initialGameState difficulty)
 
