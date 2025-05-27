@@ -1,4 +1,4 @@
-module Language.JavaScript.Wrapper.Element
+module Language.JavaScript.Wrapper.ElementWrapper
     ( Element (..)
     , ElementType (..)
     , elementTypeName

@@ -8,5 +8,5 @@ module Language.JavaScript.Wrapper
     , appendChildToBody
     ) where
 
-import           Language.JavaScript.Wrapper.Element
+import           Language.JavaScript.Wrapper.ElementWrapper
 import           Language.JavaScript.Wrapper.WrappedForeignFunction

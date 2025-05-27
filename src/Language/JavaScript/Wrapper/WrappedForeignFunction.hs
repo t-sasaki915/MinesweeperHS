@@ -9,7 +9,7 @@ module Language.JavaScript.Wrapper.WrappedForeignFunction
 import           Data.Functor                                 ((<&>))
 import           Data.Text                                    (Text, unpack)
 import           GHC.JS.Prim                                  (toJSString)
-import           Language.JavaScript.Wrapper.Element          (Element (..),
+import           Language.JavaScript.Wrapper.ElementWrapper   (Element (..),
                                                                ElementType,
                                                                elementTypeName)
 import           Language.JavaScript.Wrapper.Internal.Foreign
