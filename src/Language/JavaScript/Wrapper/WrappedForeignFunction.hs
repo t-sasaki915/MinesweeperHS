@@ -1,6 +1,5 @@
 module Language.JavaScript.Wrapper.WrappedForeignFunction
-    ( consoleLog
-    , createElement
+    ( createElement
     , setElementId
     , setElementClassName
     , appendChild
@@ -14,9 +13,6 @@ import           Language.JavaScript.Wrapper.ElementWrapper   (Element (..),
                                                                ElementType,
                                                                elementTypeName)
 import           Language.JavaScript.Wrapper.Internal.Foreign
-
-consoleLog :: Text -> IO ()
-consoleLog = consoleLog_ . toJSString . unpack
 
 createElement :: ElementType -> IO Element
 createElement elementType = createElement_ (elementTypeName elementType) <&> Element
