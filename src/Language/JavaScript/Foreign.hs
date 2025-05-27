@@ -1,24 +1,24 @@
 module Language.JavaScript.Foreign
-    ( consoleLog
-    , createElement
-    , setElementId
-    , setElementClasses
-    , appendChildToBody
+    ( consoleLog_
+    , createElement_
+    , setElementId_
+    , setElementClassName_
+    , appendChildToBody_
     ) where
 
 import           GHC.JS.Prim
 
 foreign import javascript "((message) => console.log(message))"
-    consoleLog :: JSVal -> IO ()
+    consoleLog_ :: JSVal -> IO ()
 
 foreign import javascript "((elementName) => document.createElement(elementName))"
-    createElement :: JSVal -> IO JSVal
+    createElement_ :: JSVal -> IO JSVal
 
 foreign import javascript "((element, newId) => element.id = newId)"
-    setElementId :: JSVal -> JSVal -> IO ()
+    setElementId_ :: JSVal -> JSVal -> IO ()
 
-foreign import javascript "((element, newClasses) => element.className = newClasses)"
-    setElementClasses :: JSVal -> JSVal -> IO ()
+foreign import javascript "((element, newClassName) => element.className = newClassName)"
+    setElementClassName_ :: JSVal -> JSVal -> IO ()
 
 foreign import javascript "((element) => document.body.appendChild(element))"
-    appendChildToBody :: JSVal -> IO ()
+    appendChildToBody_ :: JSVal -> IO ()

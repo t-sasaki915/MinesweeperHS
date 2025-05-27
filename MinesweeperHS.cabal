@@ -20,7 +20,10 @@ source-repository head
 
 library
   exposed-modules:
+      Language.JavaScript.Wrapper.ElementType
+      Language.JavaScript.Wrapper.WrappedForeignFunction
       Language.JavaScript.Foreign
+      Language.JavaScript.Wrapper
   other-modules:
       Paths_MinesweeperHS
   autogen-modules:
@@ -30,6 +33,7 @@ library
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , text ==2.1.2
   default-language: Haskell2010
   default-extensions: LambdaCase, OverloadedStrings
 

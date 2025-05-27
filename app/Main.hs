@@ -1,14 +1,13 @@
 module Main (main) where
 
-import           GHC.JS.Prim                 (toJSString)
-import           Language.JavaScript.Foreign
+import           Language.JavaScript.Wrapper
 
 main :: IO ()
 main = do
-    element <- createElement (toJSString "div")
-    setElementId element (toJSString "asdf")
-    setElementClasses element (toJSString "gameCell closedCell")
+    element <- createElement Div
+    setElementId element "asdf"
+    setElementClassName element "gameCell closedCell"
 
     appendChildToBody element
 
-    consoleLog (toJSString "TEST")
+    consoleLog "TEST"
