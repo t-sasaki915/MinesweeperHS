@@ -1,8 +1,6 @@
 module Language.JavaScript.Framework
     ( AppState (..)
     , consoleLog
-    , getAppState
-    , setAppState
     , initialiseAppState
     ) where
 

@@ -10,8 +10,8 @@ import           Control.Monad.Trans.State.Strict             (StateT,
 import           GHC.JS.Foreign.Callback                      (asyncCallback)
 import           GHC.JS.Prim                                  (JSVal,
                                                                toJSString)
-import           Language.JavaScript.Framework                (AppState,
-                                                               getAppState,
+import           Language.JavaScript.Framework                (AppState)
+import           Language.JavaScript.Framework.AppState       (getAppState,
                                                                setAppState)
 import           Language.JavaScript.Wrapper.ElementWrapper   (Element (..))
 import           Language.JavaScript.Wrapper.Internal.Foreign (addEventListener_)
