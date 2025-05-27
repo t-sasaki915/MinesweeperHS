@@ -47,6 +47,9 @@ executable MinesweeperHS-exe
   other-modules:
       Paths_MinesweeperHS
       GameCell
+      GameDifficulty
+      GameLogic
+      GameScreen
       GameState
   autogen-modules:
       Paths_MinesweeperHS
