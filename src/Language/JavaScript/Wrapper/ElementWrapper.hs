@@ -6,7 +6,7 @@ module Language.JavaScript.Wrapper.ElementWrapper
 
 import           GHC.JS.Prim (JSVal, toJSString)
 
-data Element = Element JSVal
+newtype Element = Element JSVal
 
 data ElementType = Div
                  deriving (Show, Eq)
