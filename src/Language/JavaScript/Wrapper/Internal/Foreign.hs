@@ -1,4 +1,4 @@
-module Language.JavaScript.Foreign
+module Language.JavaScript.Wrapper.Internal.Foreign
     ( consoleLog_
     , createElement_
     , setElementId_
@@ -11,13 +11,13 @@ import           GHC.JS.Prim
 foreign import javascript "((message) => console.log(message))"
     consoleLog_ :: JSVal -> IO ()
 
-foreign import javascript "((elementName) => document.createElement(elementName))"
+foreign import javascript "((elementTypeName) => document.createElement(elementTypeName))"
     createElement_ :: JSVal -> IO JSVal
 
-foreign import javascript "((element, newId) => element.id = newId)"
+foreign import javascript "((newId, element) => element.id = newId)"
     setElementId_ :: JSVal -> JSVal -> IO ()
 
-foreign import javascript "((element, newClassName) => element.className = newClassName)"
+foreign import javascript "((newClassName, element) => element.className = newClassName)"
     setElementClassName_ :: JSVal -> JSVal -> IO ()
 
 foreign import javascript "((element) => document.body.appendChild(element))"

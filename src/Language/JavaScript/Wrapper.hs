@@ -1,6 +1,6 @@
 module Language.JavaScript.Wrapper
-    ( ElementType (..)
-    , elementName
+    ( Element (..)
+    , ElementType (..)
     , consoleLog
     , createElement
     , setElementId
@@ -8,5 +8,5 @@ module Language.JavaScript.Wrapper
     , appendChildToBody
     ) where
 
-import           Language.JavaScript.Wrapper.ElementType
+import           Language.JavaScript.Wrapper.Element
 import           Language.JavaScript.Wrapper.WrappedForeignFunction

@@ -20,9 +20,9 @@ source-repository head
 
 library
   exposed-modules:
-      Language.JavaScript.Wrapper.ElementType
+      Language.JavaScript.Wrapper.Internal.Foreign
+      Language.JavaScript.Wrapper.Element
       Language.JavaScript.Wrapper.WrappedForeignFunction
-      Language.JavaScript.Foreign
       Language.JavaScript.Wrapper
   other-modules:
       Paths_MinesweeperHS

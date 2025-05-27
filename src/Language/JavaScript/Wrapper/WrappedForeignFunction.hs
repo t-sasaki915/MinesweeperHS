@@ -6,23 +6,25 @@ module Language.JavaScript.Wrapper.WrappedForeignFunction
     , appendChildToBody
     ) where
 
-import           Data.Text                               (Text, unpack)
-import           GHC.JS.Prim                             (JSVal, toJSString)
-import           Language.JavaScript.Foreign
-import           Language.JavaScript.Wrapper.ElementType (ElementType,
-                                                          elementName)
+import           Data.Functor                                 ((<&>))
+import           Data.Text                                    (Text, unpack)
+import           GHC.JS.Prim                                  (toJSString)
+import           Language.JavaScript.Wrapper.Element          (Element (..),
+                                                               ElementType,
+                                                               elementTypeName)
+import           Language.JavaScript.Wrapper.Internal.Foreign
 
 consoleLog :: Text -> IO ()
 consoleLog = consoleLog_ . toJSString . unpack
 
-createElement :: ElementType -> IO JSVal
-createElement = createElement_ . elementName
+createElement :: ElementType -> IO Element
+createElement elementType = createElement_ (elementTypeName elementType) <&> Element
 
-setElementId :: JSVal -> Text -> IO ()
-setElementId element = setElementId_ element . toJSString . unpack
+setElementId :: Text -> Element -> IO ()
+setElementId newId (Element element) = setElementId_ (toJSString $ unpack newId) element
 
-setElementClassName :: JSVal -> Text -> IO ()
-setElementClassName element = setElementClassName_ element . toJSString . unpack
+setElementClassName :: Text -> Element -> IO ()
+setElementClassName newClassName (Element element) = setElementClassName_ (toJSString $ unpack newClassName) element
 
-appendChildToBody :: JSVal -> IO ()
-appendChildToBody = appendChildToBody_
+appendChildToBody :: Element -> IO ()
+appendChildToBody (Element element) = appendChildToBody_ element

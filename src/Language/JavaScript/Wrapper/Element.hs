@@ -1,0 +1,15 @@
+module Language.JavaScript.Wrapper.Element
+    ( Element (..)
+    , ElementType (..)
+    , elementTypeName
+    ) where
+
+import           GHC.JS.Prim (JSVal, toJSString)
+
+data Element = Element JSVal
+
+data ElementType = Div
+                 deriving (Show, Eq)
+
+elementTypeName :: ElementType -> JSVal
+elementTypeName Div = toJSString "div"

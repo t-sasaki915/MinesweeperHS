@@ -5,8 +5,8 @@ import           Language.JavaScript.Wrapper
 main :: IO ()
 main = do
     element <- createElement Div
-    setElementId element "asdf"
-    setElementClassName element "gameCell closedCell"
+    setElementId "asdf" element
+    setElementClassName "gameCell closedCell" element
 
     appendChildToBody element
 
