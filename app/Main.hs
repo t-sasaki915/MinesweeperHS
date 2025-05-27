@@ -5,6 +5,7 @@ module Main (main) where
 import           Control.Lens                  (makeLenses, over)
 import           Data.Aeson                    (FromJSON (..), ToJSON (..),
                                                 Value (..), object, (.:), (.=))
+import qualified Data.Text                     as Text
 import           Language.JavaScript.Framework
 import           Language.JavaScript.Wrapper
 
@@ -35,15 +36,16 @@ main = do
     element <- createElement Div
     setElementId "asdf" element
     setElementClassName "gameCell closedCell" element
+    addEventListener Click onGameCellClicked element
 
     appendChild gameContainer element
 
-    gameState <- getAppState :: IO GameState
-    print gameState
+    consoleLog "TEST"
+
+onGameCellClicked :: IO ()
+onGameCellClicked = do
+    gameState <- getAppState
+
+    consoleLog (Text.show gameState)
 
     setAppState (over counter (+ 1) gameState)
-
-    gameState2 <- getAppState :: IO GameState
-    print gameState2
-
-    consoleLog "TEST"
