@@ -57,6 +57,9 @@ jobs:
       - name: Build
         run: |
           source ~/.ghcup/env
+
+          cabal update
+
           chmod +x build.sh
           ./build.sh
       - name: Upload artifact
