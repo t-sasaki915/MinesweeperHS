@@ -1,8 +1,11 @@
-module GameCell (GameCell (..)) where
+module GameCell (GameCell (..), cellId, aroundCells) where
 
-import           Control.Monad (mzero)
-import           Data.Aeson    (FromJSON (..), ToJSON (..), Value (..), object,
-                                (.:), (.=))
+import           Control.Monad  (mzero)
+import           Data.Aeson     (FromJSON (..), ToJSON (..), Value (..), object,
+                                 (.:), (.=))
+import           Data.Text      (Text, pack)
+import           GameDifficulty (GameDifficulty, screenHeight, screenWidth)
+import           Text.Printf    (printf)
 
 data GameCell = GameCell Int Int deriving (Show, Eq)
 
@@ -16,3 +19,28 @@ instance FromJSON GameCell where
             <*> v .: "y"
 
     parseJSON _ = mzero
+
+cellId :: GameCell -> Text
+cellId (GameCell x y) = pack $ printf "gameCell_%d_%d" x y
+
+aroundCells :: GameDifficulty -> GameCell -> [GameCell]
+aroundCells difficulty (GameCell centreX centreY) = possibleCells difficulty
+    [ GameCell (centreX - 1) (centreY - 1)
+    , GameCell centreX       (centreY - 1)
+    , GameCell (centreX + 1) (centreY - 1)
+    , GameCell (centreX - 1) centreY
+    , GameCell centreX       centreY
+    , GameCell (centreX + 1) centreY
+    , GameCell (centreX - 1) (centreY + 1)
+    , GameCell centreX       (centreY + 1)
+    , GameCell (centreX + 1) (centreY + 1)
+    ]
+
+possibleCells :: GameDifficulty -> [GameCell] -> [GameCell]
+possibleCells difficulty = filter isPossible
+    where
+        isPossible :: GameCell -> Bool
+        isPossible (GameCell x y) =
+            let width = screenWidth difficulty
+                height = screenHeight difficulty in
+                    1 <= x && x <= width && 1 <= y && y <= height

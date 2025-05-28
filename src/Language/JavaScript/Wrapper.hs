@@ -15,6 +15,7 @@ module Language.JavaScript.Wrapper
     , addEventListener
     , addEventListenerWithState
     , getURLSearchParam
+    , randomInt
     ) where
 
 import           Data.Text                                    (Text, pack,
@@ -25,7 +26,8 @@ import           GHC.JS.Prim                                  (fromJSString,
 import           Language.JavaScript.Wrapper.ElementWrapper
 import           Language.JavaScript.Wrapper.EventWrapper
 import           Language.JavaScript.Wrapper.Internal.Foreign (consoleLog_,
-                                                               getURLSearchParam_)
+                                                               getURLSearchParam_,
+                                                               randomInt_)
 
 consoleLog :: Text -> IO ()
 consoleLog = consoleLog_ . toJSString . unpack
@@ -35,3 +37,6 @@ getURLSearchParam paramName =
     getURLSearchParam_ (toJSString $ unpack paramName) >>= \rawParam ->
         if isNull rawParam then return Nothing
                            else return $ Just (pack $ fromJSString rawParam)
+
+randomInt :: Int -> Int -> IO Int
+randomInt = randomInt_

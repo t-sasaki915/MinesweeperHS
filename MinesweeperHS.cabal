@@ -46,6 +46,7 @@ executable MinesweeperHS-exe
   main-is: Main.hs
   other-modules:
       Paths_MinesweeperHS
+      GameLogic.MineGenerator
       GameCell
       GameDifficulty
       GameLogic

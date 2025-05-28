@@ -11,6 +11,7 @@ module Language.JavaScript.Wrapper.Internal.Foreign
     , getElementById_
     , addEventListener_
     , getURLSearchParam_
+    , randomInt_
     ) where
 
 import           GHC.JS.Foreign.Callback (Callback)
@@ -51,3 +52,6 @@ foreign import javascript "((eventType, listener, element) => element.addEventLi
 
 foreign import javascript "((paramName) => new URLSearchParams(document.location.search).get(paramName))"
     getURLSearchParam_ :: JSVal -> IO JSVal
+
+foreign import javascript "((min, max) => Math.floor(Math.random() * (max - min + 1)) + min)"
+    randomInt_ :: Int -> Int -> IO Int
