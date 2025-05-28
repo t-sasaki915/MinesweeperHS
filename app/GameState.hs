@@ -3,8 +3,10 @@
 module GameState
     ( GameState (..)
     , isGameStarted
+    , isGameOver
     , gameDifficulty
     , cellsWithMine
+    , openedCells
     , initialGameState
     ) where
 
@@ -19,8 +21,10 @@ import           GameDifficulty                (GameDifficulty)
 
 data GameState = GameState
     { _isGameStarted  :: Bool
+    , _isGameOver     :: Bool
     , _gameDifficulty :: GameDifficulty
     , _cellsWithMine  :: [GameCell]
+    , _openedCells    :: [GameCell]
     } deriving Show
 
 makeLenses ''GameState
@@ -29,16 +33,20 @@ instance ToJSON GameState where
     toJSON gameState =
         object
             [ "isGameStarted"  .= (gameState ^. isGameStarted)
+            , "isGameOver"     .= (gameState ^. isGameOver)
             , "gameDifficulty" .= (gameState ^. gameDifficulty)
             , "cellsWithMine"  .= (gameState ^. cellsWithMine)
+            , "openedCells"    .= (gameState ^. openedCells)
             ]
 
 instance FromJSON GameState where
     parseJSON (Object v) =
         GameState
             <$> v .: "isGameStarted"
+            <*> v .: "isGameOver"
             <*> v .: "gameDifficulty"
             <*> v .: "cellsWithMine"
+            <*> v .: "openedCells"
 
     parseJSON _ = mzero
 
@@ -48,6 +56,8 @@ initialGameState :: GameDifficulty -> GameState
 initialGameState difficulty =
     GameState
         { _isGameStarted  = False
+        , _isGameOver     = False
         , _gameDifficulty = difficulty
         , _cellsWithMine  = []
+        , _openedCells    = []
         }

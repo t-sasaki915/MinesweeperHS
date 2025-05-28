@@ -9,7 +9,8 @@ import qualified Data.Text                   as Text
 import           Language.JavaScript.Wrapper
 import           Text.Printf                 (printf)
 
-import           GameCell                    (GameCell (..), cellId)
+import           GameCell                    (GameCell (..), cellId,
+                                              closedCellClass)
 import           GameDifficulty              (GameDifficulty, allDifficulties,
                                               defaultGameDifficulty,
                                               screenHeight, screenWidth)
@@ -28,7 +29,7 @@ renderGameScreen difficulty = do
 
             cellElem <- createElement Div
             setElementId (cellId gameCell) cellElem
-            setElementClassName "gameCell closedCell" cellElem
+            setElementClassName closedCellClass cellElem
             addEventListenerWithState Click (onGameCellClicked gameCell) cellElem
 
             appendChild rowElem cellElem

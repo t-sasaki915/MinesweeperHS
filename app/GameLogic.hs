@@ -1,14 +1,15 @@
 module GameLogic (onGameCellClicked) where
 
-import           Control.Lens                     (set, (^.))
-import           Control.Monad                    (forM_)
+import           Control.Lens                     (over, set, (^.))
+import           Control.Monad                    (filterM, forM_, when)
+import           Control.Monad.Extra              (whenM)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
-import           Data.Text                        (pack)
+import           Data.List.Extra                  (cons)
+import           Data.Maybe                       (fromJust)
 import           Language.JavaScript.Wrapper
-import           Text.Printf                      (printf)
 
-import           GameCell                         (GameCell (..), cellId)
+import           GameCell
 import           GameLogic.MineGenerator          (generateMines)
 import           GameState
 
@@ -16,18 +17,73 @@ onGameCellClicked :: GameCell -> StateT GameState IO ()
 onGameCellClicked clickedCell = do
     state <- get
 
-    if state ^. isGameStarted then
-        lift $ consoleLog (pack $ printf "Cell clicked: %s" (show clickedCell))
+    let gameStarted = state ^. isGameStarted
+        gameOver    = state ^. isGameOver
 
-    else do
-        lift $ consoleLog (pack $ printf "Game started. First cell: %s" (show clickedCell))
+    when (gameStarted && not gameOver) $
+        whenM (isCellClosed clickedCell) $
+            openCell clickedCell
 
+    when (not gameStarted && not gameOver) $ do
         generatedMines <- lift $ generateMines (state ^. gameDifficulty) clickedCell
 
         put $
             set isGameStarted True $
                 set cellsWithMine generatedMines state
 
-        forM_ generatedMines $ \mineCell -> do
-            cellElem <- lift $ getElementById (cellId mineCell)
-            lift $ setElementClassName "gameCell openedCellWithMine" cellElem
+        openCell clickedCell
+
+openCell :: GameCell -> StateT GameState IO ()
+openCell cell = do
+    state <- get
+
+    calculateCellStatus cell >>= \case
+        IsMine -> do
+            forM_ (state ^. cellsWithMine) $ \mineCell -> do
+                mineCellElem <- lift $ getElementById (cellId mineCell)
+                lift $ setElementClassName openedCellWithMineClass mineCellElem
+
+            hypocentreElem <- lift $ getElementById (cellId cell)
+            lift $ setElementClassName hypocentreCellClass hypocentreElem
+
+            put $ set isGameOver True state
+
+        Zero -> do
+            cellElem <- lift $ getElementById (cellId cell)
+            lift $ setElementClassName openedCellClass cellElem
+
+            put $ over openedCells (cons cell) state
+
+            let around = aroundCells (state ^. gameDifficulty) cell
+            filterM isCellClosed around >>= mapM_ openCell
+
+        numberOnCell -> do
+            cellElem <- lift $ getElementById (cellId cell)
+            lift $ setElementClassName (fromJust $ numberOnCellClass numberOnCell) cellElem
+
+            put $ over openedCells (cons cell) state
+
+isCellClosed :: Monad m => GameCell -> StateT GameState m Bool
+isCellClosed cell = get >>= \state -> return $ cell `notElem` state ^. openedCells
+
+calculateCellStatus :: Monad m => GameCell -> StateT GameState m GameCellStatus
+calculateCellStatus cell = do
+    state <- get
+
+    let mines = state ^. cellsWithMine
+        around = aroundCells (state ^. gameDifficulty) cell
+
+    if cell `notElem` mines
+        then return $
+                case length $ filter (`elem` mines) around of
+                    1 -> One
+                    2 -> Two
+                    3 -> Three
+                    4 -> Four
+                    5 -> Five
+                    6 -> Six
+                    7 -> Seven
+                    8 -> Eight
+                    0 -> Zero
+                    _ -> error "impossible"
+        else return IsMine

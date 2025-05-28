@@ -20,6 +20,8 @@ source-repository head
 
 library
   exposed-modules:
+      Control.Monad.Extra
+      Data.List.Extra
       Language.JavaScript.Framework.Internal.Foreign
       Language.JavaScript.Framework.AppState
       Language.JavaScript.Wrapper.Internal.Foreign
