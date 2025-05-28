@@ -14,8 +14,13 @@ footer {
     width: 100%;
 }
 
+#gameContainer {
+    white-space: nowrap;
+}
+
 .gameRow {
     height: 32px;
+    white-space: nowrap;
 }
 
 .gameCell {
