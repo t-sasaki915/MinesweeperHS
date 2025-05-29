@@ -94,7 +94,7 @@ revealMines :: StateT GameState IO ()
 revealMines = get >>= \state ->
     forM_ (state ^. cellsWithMine) $ \mineCell -> do
         mineCellElem <- lift $ getElementById (cellId mineCell)
-        lift $ setElementClassName (openedCellWithMineClass) mineCellElem
+        lift $ setElementClassName openedCellWithMineClass mineCellElem
 
 calculateCellStatus :: Monad m => GameCell -> StateT GameState m GameCellStatus
 calculateCellStatus cell = do
