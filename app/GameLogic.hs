@@ -10,10 +10,10 @@ import           Control.Monad.Trans.State.Strict (StateT)
 import           Data.Functor                     ((<&>))
 import           Language.JavaScript.Wrapper
 
-import           GameCell
+import           GameCell                         (GameCell, aroundCells)
 import           GameLogic.Functions
 import           GameLogic.MineGenerator          (generateMines)
-import           GameState
+import           GameState                        (GameState)
 
 onGameCellClicked :: GameCell -> StateT GameState IO ()
 onGameCellClicked clickedCell = do
@@ -67,6 +67,10 @@ openCell cell =
             applyNumberOnCell numberOnCell cell
             appendToOpenedCells cell
 
+
+data GameCellStatus = MineCell
+                    | SafeCell Int
+                    deriving Eq
 
 calculateCellStatus :: Monad m => GameCell -> StateT GameState m GameCellStatus
 calculateCellStatus cell = do

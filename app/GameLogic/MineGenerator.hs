@@ -1,9 +1,10 @@
 module GameLogic.MineGenerator (generateMines) where
 
+import           Language.JavaScript.Wrapper (randomInt)
+
 import           GameCell                    (GameCell (..), aroundCells)
 import           GameDifficulty              (GameDifficulty, numberOfMines,
                                               screenHeight, screenWidth)
-import           Language.JavaScript.Wrapper (randomInt)
 
 generateMines :: GameDifficulty -> GameCell -> IO [GameCell]
 generateMines difficulty firstCell = do

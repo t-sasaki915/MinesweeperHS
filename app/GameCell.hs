@@ -1,6 +1,5 @@
 module GameCell
-    ( GameCellStatus (..)
-    , GameCell (..)
+    ( GameCell (..)
     , numberOnCellClass
     , hypocentreCellClass
     , closedCellClass
@@ -16,12 +15,9 @@ import           Control.Monad  (mzero)
 import           Data.Aeson     (FromJSON (..), ToJSON (..), Value (..), object,
                                  (.:), (.=))
 import           Data.Text      (Text, pack)
-import           GameDifficulty (GameDifficulty, screenHeight, screenWidth)
 import           Text.Printf    (printf)
 
-data GameCellStatus = MineCell
-                    | SafeCell Int
-                    deriving Eq
+import           GameDifficulty (GameDifficulty, screenHeight, screenWidth)
 
 numberOnCellClass :: Int -> Text
 numberOnCellClass = pack . printf "gameCell openedCellWithDigit%d"

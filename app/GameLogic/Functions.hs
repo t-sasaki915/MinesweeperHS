@@ -30,7 +30,9 @@ import           Data.Text                        (Text)
 import           Language.JavaScript.Wrapper
 
 import           GameCell
-import           GameDifficulty
+import           GameDifficulty                   (GameDifficulty,
+                                                   numberOfMines, screenHeight,
+                                                   screenWidth)
 import           GameState
 
 isGameRunning :: Monad m => StateT GameState m Bool
