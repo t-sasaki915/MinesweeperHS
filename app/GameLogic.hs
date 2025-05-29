@@ -1,7 +1,7 @@
 module GameLogic (onGameCellClicked) where
 
 import           Control.Lens                     (over, set, (^.))
-import           Control.Monad                    (filterM, forM_, when)
+import           Control.Monad                    (forM_, when)
 import           Control.Monad.Extra              (whenM)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
@@ -10,6 +10,7 @@ import           Data.Maybe                       (fromJust)
 import           Language.JavaScript.Wrapper
 
 import           GameCell
+import           GameDifficulty
 import           GameLogic.MineGenerator          (generateMines)
 import           GameState
 
@@ -21,8 +22,10 @@ onGameCellClicked clickedCell = do
         gameOver    = state ^. isGameOver
 
     when (gameStarted && not gameOver) $
-        whenM (isCellClosed clickedCell) $
+        whenM (isCellClosed clickedCell) $ do
             openCell clickedCell
+
+            checkIfCleared
 
     when (not gameStarted && not gameOver) $ do
         generatedMines <- lift $ generateMines (state ^. gameDifficulty) clickedCell
@@ -32,6 +35,26 @@ onGameCellClicked clickedCell = do
                 set cellsWithMine generatedMines state
 
         openCell clickedCell
+
+        checkIfCleared
+
+
+checkIfCleared :: StateT GameState IO ()
+checkIfCleared = do
+    state <- get
+
+    let difficulty = state ^. gameDifficulty
+        width = screenWidth difficulty
+        height = screenHeight difficulty
+        numOfMines = numberOfMines difficulty
+
+        numberOfOpenableCells = (width * height) - numOfMines
+        opened = state ^. openedCells
+
+    when (length opened >= numberOfOpenableCells) $ do
+        lift $ consoleLog "Clear"
+
+        put $ set isGameOver True state
 
 openCell :: GameCell -> StateT GameState IO ()
 openCell cell = do
@@ -55,7 +78,11 @@ openCell cell = do
             put $ over openedCells (cons cell) state
 
             let around = aroundCells (state ^. gameDifficulty) cell
-            filterM isCellClosed around >>= mapM_ openCell
+            forM_ around $ \c -> do
+                newState <- get
+
+                when (c `notElem` newState ^. openedCells) $
+                    openCell c
 
         numberOnCell -> do
             cellElem <- lift $ getElementById (cellId cell)
