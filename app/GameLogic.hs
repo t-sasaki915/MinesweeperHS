@@ -1,4 +1,7 @@
-module GameLogic (onGameCellClicked) where
+module GameLogic
+    ( onGameCellClicked
+    , onGameCellRightClicked
+    ) where
 
 import           Control.Lens                     (over, set, (^.))
 import           Control.Monad                    (forM_, unless, when)
@@ -38,6 +41,23 @@ onGameCellClicked clickedCell = do
 
         checkIfCleared
 
+
+onGameCellRightClicked :: GameCell -> StateT GameState IO ()
+onGameCellRightClicked clickedCell = do
+    state <- get
+
+    whenM (isCellClosed clickedCell) $
+        if clickedCell `notElem` (state ^. flaggedCells) then do
+            cellElem <- lift $ getElementById (cellId clickedCell)
+            lift $ setElementClassName closedCellWithFlagClass cellElem
+
+            put $ over flaggedCells (cons clickedCell) state
+
+        else do
+            cellElem <- lift $ getElementById (cellId clickedCell)
+            lift $ setElementClassName closedCellClass cellElem
+
+            put $ over flaggedCells (filter (/= clickedCell)) state
 
 checkIfCleared :: StateT GameState IO ()
 checkIfCleared = do

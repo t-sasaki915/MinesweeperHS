@@ -6,6 +6,7 @@ module GameCell
     , closedCellClass
     , openedCellClass
     , openedCellWithMineClass
+    , closedCellWithFlagClass
     , cellId
     , aroundCells
     ) where
@@ -51,6 +52,9 @@ openedCellClass = "gameCell openedCell"
 
 openedCellWithMineClass :: Text
 openedCellWithMineClass = "gameCell openedCellWithMine"
+
+closedCellWithFlagClass :: Text
+closedCellWithFlagClass = "gameCell closedCellWithFlag"
 
 data GameCell = GameCell Int Int deriving (Show, Eq)
 

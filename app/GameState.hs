@@ -7,6 +7,7 @@ module GameState
     , gameDifficulty
     , cellsWithMine
     , openedCells
+    , flaggedCells
     , initialGameState
     ) where
 
@@ -25,6 +26,7 @@ data GameState = GameState
     , _gameDifficulty :: GameDifficulty
     , _cellsWithMine  :: [GameCell]
     , _openedCells    :: [GameCell]
+    , _flaggedCells   :: [GameCell]
     } deriving Show
 
 makeLenses ''GameState
@@ -37,6 +39,7 @@ instance ToJSON GameState where
             , "gameDifficulty" .= (gameState ^. gameDifficulty)
             , "cellsWithMine"  .= (gameState ^. cellsWithMine)
             , "openedCells"    .= (gameState ^. openedCells)
+            , "flaggedCells"   .= (gameState ^. flaggedCells)
             ]
 
 instance FromJSON GameState where
@@ -47,6 +50,7 @@ instance FromJSON GameState where
             <*> v .: "gameDifficulty"
             <*> v .: "cellsWithMine"
             <*> v .: "openedCells"
+            <*> v .: "flaggedCells"
 
     parseJSON _ = mzero
 
@@ -60,4 +64,5 @@ initialGameState difficulty =
         , _gameDifficulty = difficulty
         , _cellsWithMine  = []
         , _openedCells    = []
+        , _flaggedCells   = []
         }

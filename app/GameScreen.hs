@@ -14,7 +14,8 @@ import           GameCell                    (GameCell (..), cellId,
 import           GameDifficulty              (GameDifficulty, allDifficulties,
                                               defaultGameDifficulty,
                                               screenHeight, screenWidth)
-import           GameLogic                   (onGameCellClicked)
+import           GameLogic                   (onGameCellClicked,
+                                              onGameCellRightClicked)
 
 renderGameScreen :: GameDifficulty -> IO ()
 renderGameScreen difficulty = do
@@ -30,7 +31,8 @@ renderGameScreen difficulty = do
             cellElem <- createElement Div
             setElementId (cellId gameCell) cellElem
             setElementClassName closedCellClass cellElem
-            addEventListenerWithState Click (onGameCellClicked gameCell) cellElem
+            addEventListener Click (onGameCellClicked gameCell) cellElem
+            addEventListener RightClick (onGameCellRightClicked gameCell) cellElem
 
             appendChild rowElem cellElem
 

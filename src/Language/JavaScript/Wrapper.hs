@@ -14,7 +14,7 @@ module Language.JavaScript.Wrapper
     , appendChild
     , getElementById
     , addEventListener
-    , addEventListenerWithState
+    , addEventListenerNoState
     , getURLSearchParam
     , randomInt
     ) where

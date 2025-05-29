@@ -1,7 +1,6 @@
 module Language.JavaScript.Wrapper.ElementWrapper
     ( Element (..)
     , ElementType (..)
-    , elementTypeName
     , createElement
     , createTextNode
     , setElementId

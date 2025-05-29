@@ -1,33 +1,30 @@
 module Language.JavaScript.Wrapper.EventWrapper
     ( EventType (..)
-    , eventTypeName
     , addEventListener
-    , addEventListenerWithState
+    , addEventListenerNoState
     ) where
 
 import           Control.Monad.Trans.State.Strict             (StateT,
                                                                execStateT)
 import           GHC.JS.Foreign.Callback                      (asyncCallback)
-import           GHC.JS.Prim                                  (JSVal,
-                                                               toJSString)
 import           Language.JavaScript.Framework                (AppState)
 import           Language.JavaScript.Framework.AppState       (getAppState,
                                                                setAppState)
 import           Language.JavaScript.Wrapper.ElementWrapper   (Element (..))
-import           Language.JavaScript.Wrapper.Internal.Foreign (addEventListener_)
+import           Language.JavaScript.Wrapper.Internal.Foreign
 
 data EventType = Click
+               | RightClick
                deriving Show
 
-eventTypeName :: EventType -> JSVal
-eventTypeName Click = toJSString "click"
-
-addEventListener :: EventType -> IO () -> Element -> IO ()
-addEventListener eventType listener (Element element) =
+addEventListenerNoState :: EventType -> IO () -> Element -> IO ()
+addEventListenerNoState eventType listener (Element element) =
     asyncCallback listener >>= \callback ->
-        addEventListener_ (eventTypeName eventType) callback element
+        case eventType of
+            Click      -> addLeftClickEventListener_ callback element
+            RightClick -> addRightClickEventListener_ callback element
 
-addEventListenerWithState :: AppState a => EventType -> StateT a IO () -> Element -> IO ()
-addEventListenerWithState eventType stateListener element =
+addEventListener :: AppState a => EventType -> StateT a IO () -> Element -> IO ()
+addEventListener eventType stateListener element =
     let listener = getAppState >>= execStateT stateListener >>= setAppState in
-        addEventListener eventType listener element
+        addEventListenerNoState eventType listener element
