@@ -1,7 +1,7 @@
 module GameLogic (onGameCellClicked) where
 
 import           Control.Lens                     (over, set, (^.))
-import           Control.Monad                    (forM_, when)
+import           Control.Monad                    (forM_, unless, when)
 import           Control.Monad.Extra              (whenM)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
@@ -48,11 +48,10 @@ checkIfCleared = do
         height = screenHeight difficulty
         numOfMines = numberOfMines difficulty
 
-        numberOfOpenableCells = (width * height) - numOfMines
-        opened = state ^. openedCells
+    when (length (state ^. openedCells) >= ((width * height) - numOfMines)) $ do
+        lift $ alert "Clear"
 
-    when (length opened >= numberOfOpenableCells) $ do
-        lift $ consoleLog "Clear"
+        revealMines
 
         put $ set isGameOver True state
 
@@ -62,9 +61,7 @@ openCell cell = do
 
     calculateCellStatus cell >>= \case
         IsMine -> do
-            forM_ (state ^. cellsWithMine) $ \mineCell -> do
-                mineCellElem <- lift $ getElementById (cellId mineCell)
-                lift $ setElementClassName openedCellWithMineClass mineCellElem
+            revealMines
 
             hypocentreElem <- lift $ getElementById (cellId cell)
             lift $ setElementClassName hypocentreCellClass hypocentreElem
@@ -81,7 +78,7 @@ openCell cell = do
             forM_ around $ \c -> do
                 newState <- get
 
-                when (c `notElem` newState ^. openedCells) $
+                unless (c `elem` newState ^. openedCells) $
                     openCell c
 
         numberOnCell -> do
@@ -92,6 +89,12 @@ openCell cell = do
 
 isCellClosed :: Monad m => GameCell -> StateT GameState m Bool
 isCellClosed cell = get >>= \state -> return $ cell `notElem` state ^. openedCells
+
+revealMines :: StateT GameState IO ()
+revealMines = get >>= \state ->
+    forM_ (state ^. cellsWithMine) $ \mineCell -> do
+        mineCellElem <- lift $ getElementById (cellId mineCell)
+        lift $ setElementClassName (openedCellWithMineClass) mineCellElem
 
 calculateCellStatus :: Monad m => GameCell -> StateT GameState m GameCellStatus
 calculateCellStatus cell = do

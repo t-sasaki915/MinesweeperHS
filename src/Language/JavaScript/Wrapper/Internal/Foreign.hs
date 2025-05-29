@@ -1,5 +1,6 @@
 module Language.JavaScript.Wrapper.Internal.Foreign
     ( consoleLog_
+    , alert_
     , createElement_
     , createTextNode_
     , setElementId_
@@ -19,6 +20,9 @@ import           GHC.JS.Prim             (JSVal)
 
 foreign import javascript "((message) => console.log(message))"
     consoleLog_ :: JSVal -> IO ()
+
+foreign import javascript "((message) => alert(message))"
+    alert_ :: JSVal -> IO ()
 
 foreign import javascript "((elementTypeName) => document.createElement(elementTypeName))"
     createElement_ :: JSVal -> IO JSVal

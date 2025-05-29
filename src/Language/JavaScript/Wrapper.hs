@@ -3,6 +3,7 @@ module Language.JavaScript.Wrapper
     , ElementType (..)
     , EventType (..)
     , consoleLog
+    , alert
     , createElement
     , createTextNode
     , setElementId
@@ -25,12 +26,16 @@ import           GHC.JS.Prim                                  (fromJSString,
                                                                toJSString)
 import           Language.JavaScript.Wrapper.ElementWrapper
 import           Language.JavaScript.Wrapper.EventWrapper
-import           Language.JavaScript.Wrapper.Internal.Foreign (consoleLog_,
+import           Language.JavaScript.Wrapper.Internal.Foreign (alert_,
+                                                               consoleLog_,
                                                                getURLSearchParam_,
                                                                randomInt_)
 
 consoleLog :: Text -> IO ()
 consoleLog = consoleLog_ . toJSString . unpack
+
+alert :: Text -> IO ()
+alert = alert_ . toJSString . unpack
 
 getURLSearchParam :: Text -> IO (Maybe Text)
 getURLSearchParam paramName =
