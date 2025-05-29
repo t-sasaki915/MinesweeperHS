@@ -18,28 +18,12 @@ import           Data.Text      (Text, pack)
 import           GameDifficulty (GameDifficulty, screenHeight, screenWidth)
 import           Text.Printf    (printf)
 
-data GameCellStatus = IsMine
-                    | One
-                    | Two
-                    | Three
-                    | Four
-                    | Five
-                    | Six
-                    | Seven
-                    | Eight
-                    | Zero
+data GameCellStatus = MineCell
+                    | SafeCell Int
                     deriving Eq
 
-numberOnCellClass :: GameCellStatus -> Maybe Text
-numberOnCellClass One   = Just "gameCell openedCellWithDigit1"
-numberOnCellClass Two   = Just "gameCell openedCellWithDigit2"
-numberOnCellClass Three = Just "gameCell openedCellWithDigit3"
-numberOnCellClass Four  = Just "gameCell openedCellWithDigit4"
-numberOnCellClass Five  = Just "gameCell openedCellWithDigit5"
-numberOnCellClass Six   = Just "gameCell openedCellWithDigit6"
-numberOnCellClass Seven = Just "gameCell openedCellWithDigit7"
-numberOnCellClass Eight = Just "gameCell openedCellWithDigit8"
-numberOnCellClass _     = Nothing
+numberOnCellClass :: Int -> Text
+numberOnCellClass = pack . printf "gameCell openedCellWithDigit%d"
 
 hypocentreCellClass :: Text
 hypocentreCellClass = "gameCell hypocentreCell"
