@@ -8,6 +8,7 @@ module GameLogic.Functions
     , currentDifficulty
     , gameOver
     , revealMines
+    , markWrongFlags
     , startGame
     , setHypocentre
     , applyOpenedCellClass
@@ -25,6 +26,7 @@ import           Control.Monad.Extra              (unlessM)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
 import           Data.List.Extra                  (cons)
+import           Data.Text                        (Text)
 import           Language.JavaScript.Wrapper
 
 import           GameCell
@@ -62,42 +64,42 @@ currentDifficulty = get >>= \state -> return $ state ^. gameDifficulty
 gameOver :: Monad m => StateT GameState m ()
 gameOver = get >>= put . set isGameOver True
 
-revealMines :: StateT GameState IO ()
-revealMines = get >>= \state ->
-    forM_ (state ^. cellsWithMine) $ \mineCell ->
-        unlessM (isCellFlagged mineCell) $ lift $
-            getElementById (cellId mineCell) >>=
-                setElementClassName openedCellWithMineClass
-
 startGame :: Monad m => [GameCell] -> StateT GameState m ()
 startGame generatedMines = get >>= put .
     set isGameStarted True .
         set cellsWithMine generatedMines
 
+applyTextureToCell :: Text -> GameCell -> StateT GameState IO ()
+applyTextureToCell texture cell = lift $
+    getElementById (cellId cell) >>=
+        setElementClassName texture
+
+revealMines :: StateT GameState IO ()
+revealMines = get >>= \state ->
+    forM_ (state ^. cellsWithMine) $ \mineCell ->
+        unlessM (isCellFlagged mineCell) $
+            applyTextureToCell openedCellWithMineClass mineCell
+
+markWrongFlags :: StateT GameState IO ()
+markWrongFlags = get >>= \state ->
+    forM_ (state ^. flaggedCells) $ \flaggedCell ->
+        unlessM (isCellMine flaggedCell) $
+            applyTextureToCell closedCellWithWrongFlagClass flaggedCell
+
 setHypocentre :: GameCell -> StateT GameState IO ()
-setHypocentre hypocentre = lift $
-    getElementById (cellId hypocentre) >>=
-        setElementClassName hypocentreCellClass
+setHypocentre = applyTextureToCell hypocentreCellClass
 
 applyOpenedCellClass :: GameCell -> StateT GameState IO ()
-applyOpenedCellClass cell = lift $
-    getElementById (cellId cell) >>=
-        setElementClassName openedCellClass
+applyOpenedCellClass = applyTextureToCell openedCellClass
 
 applyNumberOnCell :: Int -> GameCell -> StateT GameState IO ()
-applyNumberOnCell n cell = lift $
-    getElementById (cellId cell) >>=
-        setElementClassName (numberOnCellClass n)
+applyNumberOnCell n = applyTextureToCell (numberOnCellClass n)
 
 applyFlagToCell :: GameCell -> StateT GameState IO ()
-applyFlagToCell cell = lift $
-    getElementById (cellId cell) >>=
-        setElementClassName closedCellWithFlagClass
+applyFlagToCell = applyTextureToCell closedCellWithFlagClass
 
 removeFlagFromCell :: GameCell -> StateT GameState IO ()
-removeFlagFromCell cell = lift $
-    getElementById (cellId cell) >>=
-        setElementClassName closedCellClass
+removeFlagFromCell = applyTextureToCell closedCellClass
 
 appendToOpenedCells :: Monad m => GameCell -> StateT GameState m ()
 appendToOpenedCells cell = get >>= put . over openedCells (cons cell)

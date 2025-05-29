@@ -49,6 +49,7 @@ openCell cell =
     calculateCellStatus cell >>= \case
         MineCell -> do
             revealMines
+            markWrongFlags
             setHypocentre cell
             gameOver
 

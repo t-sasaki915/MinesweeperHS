@@ -7,6 +7,7 @@ module GameCell
     , openedCellClass
     , openedCellWithMineClass
     , closedCellWithFlagClass
+    , closedCellWithWrongFlagClass
     , cellId
     , aroundCells
     ) where
@@ -39,6 +40,9 @@ openedCellWithMineClass = "gameCell openedCellWithMine"
 
 closedCellWithFlagClass :: Text
 closedCellWithFlagClass = "gameCell closedCellWithFlag"
+
+closedCellWithWrongFlagClass :: Text
+closedCellWithWrongFlagClass = "gameCell closedCellWithWrongFlag"
 
 data GameCell = GameCell Int Int deriving (Show, Eq)
 

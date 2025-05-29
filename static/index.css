@@ -41,6 +41,10 @@ footer {
     background-image: url("images/Flag.svg"), url("images/ClosedCell.svg");
 }
 
+.closedCellWithWrongFlag {
+    background-image: url("images/Wrong.svg"), url("images/Flag.svg"), url("images/ClosedCell.svg");
+}
+
 .closedCellWithFlagPlaceholder {
     background-image: url("images/FlagPlaceholder.svg"), url("images/ClosedCell.svg");
 }
