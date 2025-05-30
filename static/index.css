@@ -1,5 +1,12 @@
+@import url("https://fonts.googleapis.com/css2?family=Inconsolata:wght@500&display=swap");
+
 * {
-    font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace) !important;
+    font-family: "Inconsolata";
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
 }
 
 body {
