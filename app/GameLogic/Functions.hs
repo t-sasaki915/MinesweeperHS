@@ -30,6 +30,7 @@ module GameLogic.Functions
     , hideFlagPlaceholders
     , updateFlagPlacementModeButtonText
     , updateChordModeButtonText
+    , updateRemainingMinesLabel
     , aroundCells'
     ) where
 
@@ -40,6 +41,7 @@ import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
 import           Data.List.Extra                  (cons)
 import           Data.Text                        (Text)
+import qualified Data.Text                        as Text
 import           Language.JavaScript.Wrapper
 
 import           GameCell
@@ -186,6 +188,16 @@ updateChordModeButtonText =
                 else "Enter Chord Mode"
 
         lift $ appendChild buttonElem newTextNode
+
+updateRemainingMinesLabel :: StateT GameState IO ()
+updateRemainingMinesLabel = get >>= \state ->
+    currentDifficulty >>= \difficulty -> do
+        labelElem <- lift $ getElementById "remainingMinesLabel"
+        lift $ removeAllChildren labelElem
+
+        let remainingMines = numberOfMines difficulty - length (state ^. flaggedCells) in
+            lift $ createTextNode (Text.show remainingMines) >>=
+                appendChild labelElem
 
 aroundCells' :: Monad m => GameCell -> StateT GameState m [GameCell]
 aroundCells' centre = currentDifficulty >>= \difficulty ->

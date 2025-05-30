@@ -159,6 +159,8 @@ flagSequence cell =
                     applyFlagTextureToCell cell
                     appendToFlaggedCells cell
 
+            updateRemainingMinesLabel
+
 clearSequence :: StateT GameState IO ()
 clearSequence = do
     lift $ alert "CLEAR"

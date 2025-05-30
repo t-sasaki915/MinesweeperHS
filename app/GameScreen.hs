@@ -1,7 +1,8 @@
 module GameScreen
     ( renderGameScreen
-    , renderGameButtons
+    , initialiseGameButtons
     , renderDifficultySelector
+    , initialiseGameStatusLabels
     ) where
 
 import           Control.Monad               (forM_, when)
@@ -12,9 +13,7 @@ import           Text.Printf                 (printf)
 
 import           GameCell                    (GameCell (..), cellId,
                                               closedCellClass)
-import           GameDifficulty              (GameDifficulty, allDifficulties,
-                                              defaultGameDifficulty,
-                                              screenHeight, screenWidth)
+import           GameDifficulty
 import           GameLogic
 
 renderGameScreen :: GameDifficulty -> IO ()
@@ -39,8 +38,8 @@ renderGameScreen difficulty = do
 
         appendChild gameContainer rowElem
 
-renderGameButtons :: IO ()
-renderGameButtons = do
+initialiseGameButtons :: IO ()
+initialiseGameButtons = do
     flagPlacementModeButton <- getElementById "flagPlacementModeButton"
     addEventListener Click onFlagPlacementModeButtonClicked flagPlacementModeButton
 
@@ -66,3 +65,11 @@ renderDifficultySelector currentDifficulty = do
             appendChild optionElem
 
         appendChild difficultySelector optionElem
+
+initialiseGameStatusLabels :: GameDifficulty -> IO ()
+initialiseGameStatusLabels difficulty = do
+    remainingMinesLabelElem <- getElementById "remainingMinesLabel"
+
+    removeAllChildren remainingMinesLabelElem
+    createTextNode (Text.show $ numberOfMines difficulty) >>=
+        appendChild remainingMinesLabelElem

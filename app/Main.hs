@@ -20,5 +20,6 @@ main = do
     initialiseAppState (initialGameState difficulty)
 
     renderGameScreen difficulty
-    renderGameButtons
+    initialiseGameButtons
     renderDifficultySelector difficulty
+    initialiseGameStatusLabels difficulty
