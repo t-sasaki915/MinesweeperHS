@@ -89,3 +89,15 @@ footer {
 .openedCellWithDigit8 {
     background-image: url("images/Digit8.svg"), url("images/OpenedCell.svg");
 }
+
+button {
+    height: 25px;
+    padding: 1px;
+    border: 1px solid #000000;
+    background-color: #FFFFFF;
+    user-select: none;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 2px;
+    cursor: pointer;
+}
