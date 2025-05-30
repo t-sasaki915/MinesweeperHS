@@ -21,16 +21,15 @@ onGameCellClicked clickedCell = do
         unlessM (isCellOpened clickedCell `orM` isCellFlagged clickedCell) $ do
             openCell clickedCell
 
-            whenM isGameCleared $ do
-                lift $ alert "CLEAR"
-                revealMines
-                gameOver
-
     whenM canStartGame $ do
         generatedMines <- generateMines clickedCell
 
         startGame generatedMines
         openCell clickedCell
+
+    whenM isGameRunning $
+        whenM isGameCleared $
+            clearSequence
 
 onGameCellRightClicked :: GameCell -> StateT GameState IO ()
 onGameCellRightClicked clickedCell =
@@ -78,3 +77,10 @@ calculateCellStatus cell = do
     if isCellMine'
         then return MineCell
         else filterM isCellMine around <&> SafeCell . length
+
+
+clearSequence :: StateT GameState IO ()
+clearSequence = do
+    lift $ alert "CLEAR"
+    revealMines
+    gameOver
