@@ -10,7 +10,7 @@ import           Control.Monad.Trans.State.Strict (StateT)
 import           Data.Functor                     ((<&>))
 import           Language.JavaScript.Wrapper
 
-import           GameCell                         (GameCell, aroundCells)
+import           GameCell                         (GameCell)
 import           GameLogic.Functions
 import           GameLogic.MineGenerator          (generateMines)
 import           GameState                        (GameState)
@@ -27,8 +27,7 @@ onGameCellClicked clickedCell = do
                 gameOver
 
     whenM canStartGame $ do
-        difficulty     <- currentDifficulty
-        generatedMines <- lift $ generateMines difficulty clickedCell
+        generatedMines <- generateMines clickedCell
 
         startGame generatedMines
         openCell clickedCell
@@ -57,8 +56,7 @@ openCell cell =
             applyOpenedCellTexture cell
             appendToOpenedCells cell
 
-            difficulty <- currentDifficulty
-            let around = aroundCells difficulty cell
+            around <- aroundCells' cell
             forM_ around $ \c ->
                 unlessM (isCellOpened c `orM` isCellFlagged c) $
                     openCell c
@@ -74,8 +72,7 @@ data GameCellStatus = MineCell
 
 calculateCellStatus :: Monad m => GameCell -> StateT GameState m GameCellStatus
 calculateCellStatus cell = do
-    difficulty <- currentDifficulty
-    let around = aroundCells difficulty cell
+    around <- aroundCells' cell
 
     isCellMine' <- isCellMine cell
     if isCellMine'

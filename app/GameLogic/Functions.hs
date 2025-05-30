@@ -18,6 +18,7 @@ module GameLogic.Functions
     , appendToOpenedCells
     , appendToFlaggedCells
     , removeFromFlaggedCells
+    , aroundCells'
     ) where
 
 import           Control.Lens                     (over, set, (^.))
@@ -111,3 +112,7 @@ appendToFlaggedCells cell = get >>= put . over flaggedCells (cons cell)
 
 removeFromFlaggedCells :: Monad m => GameCell -> StateT GameState m ()
 removeFromFlaggedCells cell = get >>= put . over flaggedCells (filter (/= cell))
+
+aroundCells' :: Monad m => GameCell -> StateT GameState m [GameCell]
+aroundCells' centre = currentDifficulty >>= \difficulty ->
+    return $ aroundCells difficulty centre
