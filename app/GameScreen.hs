@@ -1,5 +1,6 @@
 module GameScreen
     ( renderGameScreen
+    , renderGameButtons
     , renderDifficultySelector
     ) where
 
@@ -14,8 +15,7 @@ import           GameCell                    (GameCell (..), cellId,
 import           GameDifficulty              (GameDifficulty, allDifficulties,
                                               defaultGameDifficulty,
                                               screenHeight, screenWidth)
-import           GameLogic                   (onGameCellClicked,
-                                              onGameCellRightClicked)
+import           GameLogic
 
 renderGameScreen :: GameDifficulty -> IO ()
 renderGameScreen difficulty = do
@@ -37,6 +37,11 @@ renderGameScreen difficulty = do
             appendChild rowElem cellElem
 
         appendChild gameContainer rowElem
+
+renderGameButtons :: IO ()
+renderGameButtons = do
+    restartButton <- getElementById "restartButton"
+    addEventListener Click (onRestartButtonClicked) restartButton
 
 renderDifficultySelector :: GameDifficulty -> IO ()
 renderDifficultySelector currentDifficulty = do

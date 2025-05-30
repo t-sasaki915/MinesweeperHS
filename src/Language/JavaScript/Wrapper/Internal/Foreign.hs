@@ -1,6 +1,7 @@
 module Language.JavaScript.Wrapper.Internal.Foreign
     ( consoleLog_
     , alert_
+    , refreshPage_
     , createElement_
     , createTextNode_
     , setElementId_
@@ -24,6 +25,9 @@ foreign import javascript "((message) => console.log(message))"
 
 foreign import javascript "((message) => alert(message))"
     alert_ :: JSVal -> IO ()
+
+foreign import javascript "(() => location.reload())"
+    refreshPage_ :: IO ()
 
 foreign import javascript "((elementTypeName) => document.createElement(elementTypeName))"
     createElement_ :: JSVal -> IO JSVal

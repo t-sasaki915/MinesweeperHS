@@ -17,6 +17,7 @@ module Language.JavaScript.Wrapper
     , addEventListenerNoState
     , getURLSearchParam
     , randomInt
+    , refreshPage
     ) where
 
 import           Data.Text                                    (Text, pack,
@@ -29,7 +30,8 @@ import           Language.JavaScript.Wrapper.EventWrapper
 import           Language.JavaScript.Wrapper.Internal.Foreign (alert_,
                                                                consoleLog_,
                                                                getURLSearchParam_,
-                                                               randomInt_)
+                                                               randomInt_,
+                                                               refreshPage_)
 
 consoleLog :: Text -> IO ()
 consoleLog = consoleLog_ . toJSString . unpack
@@ -45,3 +47,6 @@ getURLSearchParam paramName =
 
 randomInt :: Int -> Int -> IO Int
 randomInt = randomInt_
+
+refreshPage :: IO ()
+refreshPage = refreshPage_

@@ -1,6 +1,7 @@
 module GameLogic
     ( onGameCellClicked
     , onGameCellRightClicked
+    , onRestartButtonClicked
     ) where
 
 import           Control.Monad                    (filterM, forM_)
@@ -40,6 +41,10 @@ onGameCellRightClicked clickedCell =
             if isCellFlagged'
                 then removeFlagTextureFromCell clickedCell >> removeFromFlaggedCells clickedCell
                 else applyFlagTextureToCell clickedCell >> appendToFlaggedCells clickedCell
+
+
+onRestartButtonClicked :: StateT GameState IO ()
+onRestartButtonClicked = lift $ refreshPage
 
 
 openCell :: GameCell -> StateT GameState IO ()
