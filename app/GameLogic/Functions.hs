@@ -10,11 +10,11 @@ module GameLogic.Functions
     , revealMines
     , markWrongFlags
     , startGame
-    , setHypocentre
-    , applyOpenedCellClass
-    , applyNumberOnCell
-    , applyFlagToCell
-    , removeFlagFromCell
+    , applyHypocentreTexture
+    , applyOpenedCellTexture
+    , applyNumberTextureToCell
+    , applyFlagTextureToCell
+    , removeFlagTextureFromCell
     , appendToOpenedCells
     , appendToFlaggedCells
     , removeFromFlaggedCells
@@ -88,20 +88,20 @@ markWrongFlags = get >>= \state ->
         unlessM (isCellMine flaggedCell) $
             applyTextureToCell closedCellWithWrongFlagClass flaggedCell
 
-setHypocentre :: GameCell -> StateT GameState IO ()
-setHypocentre = applyTextureToCell hypocentreCellClass
+applyHypocentreTexture :: GameCell -> StateT GameState IO ()
+applyHypocentreTexture = applyTextureToCell hypocentreCellClass
 
-applyOpenedCellClass :: GameCell -> StateT GameState IO ()
-applyOpenedCellClass = applyTextureToCell openedCellClass
+applyOpenedCellTexture :: GameCell -> StateT GameState IO ()
+applyOpenedCellTexture = applyTextureToCell openedCellClass
 
-applyNumberOnCell :: Int -> GameCell -> StateT GameState IO ()
-applyNumberOnCell n = applyTextureToCell (numberOnCellClass n)
+applyNumberTextureToCell :: Int -> GameCell -> StateT GameState IO ()
+applyNumberTextureToCell n = applyTextureToCell (numberOnCellClass n)
 
-applyFlagToCell :: GameCell -> StateT GameState IO ()
-applyFlagToCell = applyTextureToCell closedCellWithFlagClass
+applyFlagTextureToCell :: GameCell -> StateT GameState IO ()
+applyFlagTextureToCell = applyTextureToCell closedCellWithFlagClass
 
-removeFlagFromCell :: GameCell -> StateT GameState IO ()
-removeFlagFromCell = applyTextureToCell closedCellClass
+removeFlagTextureFromCell :: GameCell -> StateT GameState IO ()
+removeFlagTextureFromCell = applyTextureToCell closedCellClass
 
 appendToOpenedCells :: Monad m => GameCell -> StateT GameState m ()
 appendToOpenedCells cell = get >>= put . over openedCells (cons cell)

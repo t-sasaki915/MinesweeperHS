@@ -40,8 +40,8 @@ onGameCellRightClicked clickedCell =
             isCellFlagged' <- isCellFlagged clickedCell
 
             if isCellFlagged'
-                then removeFlagFromCell clickedCell >> removeFromFlaggedCells clickedCell
-                else applyFlagToCell clickedCell >> appendToFlaggedCells clickedCell
+                then removeFlagTextureFromCell clickedCell >> removeFromFlaggedCells clickedCell
+                else applyFlagTextureToCell clickedCell >> appendToFlaggedCells clickedCell
 
 
 openCell :: GameCell -> StateT GameState IO ()
@@ -50,11 +50,11 @@ openCell cell =
         MineCell -> do
             revealMines
             markWrongFlags
-            setHypocentre cell
+            applyHypocentreTexture cell
             gameOver
 
         (SafeCell 0) -> do
-            applyOpenedCellClass cell
+            applyOpenedCellTexture cell
             appendToOpenedCells cell
 
             difficulty <- currentDifficulty
@@ -64,7 +64,7 @@ openCell cell =
                     openCell c
 
         (SafeCell numberOnCell) -> do
-            applyNumberOnCell numberOnCell cell
+            applyNumberTextureToCell numberOnCell cell
             appendToOpenedCells cell
 
 
