@@ -33,6 +33,7 @@ renderGameScreen difficulty = do
             setElementClassName closedCellClass cellElem
             addEventListener Click (onGameCellClicked gameCell) cellElem
             addEventListener RightClick (onGameCellRightClicked gameCell) cellElem
+            addEventListener MiddleClick (onGameCellMiddleClicked gameCell) cellElem
 
             appendChild rowElem cellElem
 

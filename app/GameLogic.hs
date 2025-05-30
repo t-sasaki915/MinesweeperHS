@@ -1,6 +1,7 @@
 module GameLogic
     ( onGameCellClicked
     , onGameCellRightClicked
+    , onGameCellMiddleClicked
     , onFlagPlacementModeButtonClicked
     , onChordModeButtonClicked
     , onRestartButtonClicked
@@ -39,6 +40,15 @@ onGameCellRightClicked :: GameCell -> StateT GameState IO ()
 onGameCellRightClicked clickedCell =
     unlessM isGameInFlagPlacementMode $
         flagSequence clickedCell
+
+onGameCellMiddleClicked :: GameCell -> StateT GameState IO ()
+onGameCellMiddleClicked clickedCell =
+    unlessM isGameInFlagPlacementMode $ do
+        chordOpenSequence clickedCell
+
+        whenM isGameRunning $
+            whenM isGameCleared
+                clearSequence
 
 onFlagPlacementModeButtonClicked :: StateT GameState IO ()
 onFlagPlacementModeButtonClicked =

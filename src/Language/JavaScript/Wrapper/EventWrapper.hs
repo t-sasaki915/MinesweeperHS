@@ -15,14 +15,16 @@ import           Language.JavaScript.Wrapper.Internal.Foreign
 
 data EventType = Click
                | RightClick
+               | MiddleClick
                deriving Show
 
 addEventListenerNoState :: EventType -> IO () -> Element -> IO ()
 addEventListenerNoState eventType listener (Element element) =
     asyncCallback listener >>= \callback ->
         case eventType of
-            Click      -> addLeftClickEventListener_ callback element
-            RightClick -> addRightClickEventListener_ callback element
+            Click       -> addLeftClickEventListener_ callback element
+            RightClick  -> addRightClickEventListener_ callback element
+            MiddleClick -> addMiddleClickEventListener_ callback element
 
 addEventListener :: AppState a => EventType -> StateT a IO () -> Element -> IO ()
 addEventListener eventType stateListener element =
