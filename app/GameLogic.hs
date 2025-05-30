@@ -6,7 +6,7 @@ module GameLogic
     , onRestartButtonClicked
     ) where
 
-import           Control.Monad                    (filterM, forM_)
+import           Control.Monad                    (filterM, forM_, when)
 import           Control.Monad.Extra              (orM, unlessM, whenM)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT)
@@ -24,7 +24,16 @@ onGameCellClicked clickedCell = do
 
     if isGameInFlagPlacementMode'
         then flagSequence clickedCell
-        else openSequence clickedCell
+        else do
+            isGameInChordMode' <- isGameInChordMode
+
+            if isGameInChordMode'
+                then chordOpenSequence clickedCell
+                else openSequence clickedCell
+
+            whenM isGameRunning $
+                whenM isGameCleared
+                    clearSequence
 
 onGameCellRightClicked :: GameCell -> StateT GameState IO ()
 onGameCellRightClicked clickedCell =
@@ -37,15 +46,10 @@ onFlagPlacementModeButtonClicked =
         isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
 
         if isGameInFlagPlacementMode'
-            then do
-                exitFlagPlacementMode
-                hideFlagPlaceholders
-                updateFlagPlacementModeButtonText
+            then exitFlagPlacementMode >> hideFlagPlaceholders
+            else enterFlagPlacementMode >> showFlagPlaceholders
 
-            else do
-                enterFlagPlacementMode
-                showFlagPlaceholders
-                updateFlagPlacementModeButtonText
+        updateFlagPlacementModeButtonText
 
 onChordModeButtonClicked :: StateT GameState IO ()
 onChordModeButtonClicked =
@@ -53,8 +57,10 @@ onChordModeButtonClicked =
         isGameInChordMode' <- isGameInChordMode
 
         if isGameInChordMode'
-            then exitChordMode >> updateChordModeButtonText
-            else enterChordMode >> updateChordModeButtonText
+            then exitChordMode
+            else enterChordMode
+
+        updateChordModeButtonText
 
 onRestartButtonClicked :: StateT GameState IO ()
 onRestartButtonClicked = lift refreshPage
@@ -106,19 +112,30 @@ openSequence cell = do
         startGame generatedMines
         openCell cell
 
+chordOpenSequence :: GameCell -> StateT GameState IO ()
+chordOpenSequence cell =
     whenM isGameRunning $
-        whenM isGameCleared
-            clearSequence
+        whenM (isCellOpened cell) $ do
+            (SafeCell numberOnCell) <- calculateCellStatus cell
+
+            around               <- aroundCells' cell
+            numberOfFlaggedCells <- filterM isCellFlagged around <&> length
+
+            when (numberOnCell == numberOfFlaggedCells) $
+                forM_ around $ \c ->
+                    unlessM (isCellOpened  c `orM` isCellFlagged c) $
+                        openCell c
 
 flagSequence :: GameCell -> StateT GameState IO ()
 flagSequence cell =
     whenM isGameRunning $
         unlessM (isCellOpened cell) $ do
-            isCellFlagged'             <- isCellFlagged cell
-            isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
+            isCellFlagged' <- isCellFlagged cell
 
             if isCellFlagged'
-                then
+                then do
+                    isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
+
                     if isGameInFlagPlacementMode'
                         then do
                             applyFlagPlaceholderTextureToCell cell
