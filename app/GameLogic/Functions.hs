@@ -3,8 +3,11 @@ module GameLogic.Functions
     , canStartGame
     , isGameCleared
     , isGameInFlagPlacementMode
+    , isGameInChordMode
     , enterFlagPlacementMode
     , exitFlagPlacementMode
+    , enterChordMode
+    , exitChordMode
     , isCellOpened
     , isCellFlagged
     , isCellMine
@@ -26,6 +29,7 @@ module GameLogic.Functions
     , showFlagPlaceholders
     , hideFlagPlaceholders
     , updateFlagPlacementModeButtonText
+    , updateChordModeButtonText
     , aroundCells'
     ) where
 
@@ -63,11 +67,20 @@ isGameCleared = get >>= \state ->
 isGameInFlagPlacementMode :: Monad m => StateT GameState m Bool
 isGameInFlagPlacementMode = get >>= \state -> return $ state ^. isFlagPlacementMode
 
+isGameInChordMode :: Monad m => StateT GameState m Bool
+isGameInChordMode = get >>= \state -> return $ state ^. isChordMode
+
 enterFlagPlacementMode :: Monad m => StateT GameState m ()
 enterFlagPlacementMode = get >>= put . set isFlagPlacementMode True
 
 exitFlagPlacementMode :: Monad m => StateT GameState m ()
 exitFlagPlacementMode = get >>= put . set isFlagPlacementMode False
+
+enterChordMode :: Monad m => StateT GameState m ()
+enterChordMode = get >>= put . set isChordMode True
+
+exitChordMode :: Monad m => StateT GameState m ()
+exitChordMode = get >>= put . set isChordMode False
 
 isCellOpened :: Monad m => GameCell -> StateT GameState m Bool
 isCellOpened cell = get >>= \state -> return $ cell `elem` (state ^. openedCells)
@@ -152,15 +165,27 @@ updateFlagPlacementModeButtonText :: StateT GameState IO ()
 updateFlagPlacementModeButtonText =
     isGameInFlagPlacementMode >>= \flagPlacementMode -> do
         buttonElem <- lift $ getElementById "flagPlacementModeButton"
-        if flagPlacementMode
-            then
-                lift $ removeAllChildren buttonElem >>
-                    createTextNode "Exit Flag Placement Mode" >>=
-                        appendChild buttonElem
-            else
-                lift $ removeAllChildren buttonElem >>
-                    createTextNode "Enter Flag Placement Mode" >>=
-                        appendChild buttonElem
+        lift $ removeAllChildren buttonElem
+
+        newTextNode <- lift $ createTextNode $
+            if flagPlacementMode
+                then "Exit Flag Placement Mode"
+                else "Enter Flag Placement Mode"
+
+        lift $ appendChild buttonElem newTextNode
+
+updateChordModeButtonText :: StateT GameState IO ()
+updateChordModeButtonText =
+    isGameInChordMode >>= \chordMode -> do
+        buttonElem <- lift $ getElementById "chordModeButton"
+        lift $ removeAllChildren buttonElem
+
+        newTextNode <- lift $ createTextNode $
+            if chordMode
+                then "Exit Chord Mode"
+                else "Enter Chord Mode"
+
+        lift $ appendChild buttonElem newTextNode
 
 aroundCells' :: Monad m => GameCell -> StateT GameState m [GameCell]
 aroundCells' centre = currentDifficulty >>= \difficulty ->

@@ -2,6 +2,7 @@ module GameLogic
     ( onGameCellClicked
     , onGameCellRightClicked
     , onFlagPlacementModeButtonClicked
+    , onChordModeButtonClicked
     , onRestartButtonClicked
     ) where
 
@@ -45,6 +46,15 @@ onFlagPlacementModeButtonClicked =
                 enterFlagPlacementMode
                 showFlagPlaceholders
                 updateFlagPlacementModeButtonText
+
+onChordModeButtonClicked :: StateT GameState IO ()
+onChordModeButtonClicked =
+    whenM isGameRunning $ do
+        isGameInChordMode' <- isGameInChordMode
+
+        if isGameInChordMode'
+            then exitChordMode >> updateChordModeButtonText
+            else enterChordMode >> updateChordModeButtonText
 
 onRestartButtonClicked :: StateT GameState IO ()
 onRestartButtonClicked = lift refreshPage

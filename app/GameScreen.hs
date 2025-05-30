@@ -43,6 +43,9 @@ renderGameButtons = do
     flagPlacementModeButton <- getElementById "flagPlacementModeButton"
     addEventListener Click onFlagPlacementModeButtonClicked flagPlacementModeButton
 
+    chordModeButton <- getElementById "chordModeButton"
+    addEventListener Click onChordModeButtonClicked chordModeButton
+
     restartButton <- getElementById "restartButton"
     addEventListener Click onRestartButtonClicked restartButton
 

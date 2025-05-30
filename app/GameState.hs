@@ -9,6 +9,7 @@ module GameState
     , openedCells
     , flaggedCells
     , isFlagPlacementMode
+    , isChordMode
     , initialGameState
     ) where
 
@@ -29,6 +30,7 @@ data GameState = GameState
     , _openedCells         :: [GameCell]
     , _flaggedCells        :: [GameCell]
     , _isFlagPlacementMode :: Bool
+    , _isChordMode         :: Bool
     } deriving Show
 
 makeLenses ''GameState
@@ -43,6 +45,7 @@ instance ToJSON GameState where
             , "openedCells"         .= (gameState ^. openedCells)
             , "flaggedCells"        .= (gameState ^. flaggedCells)
             , "isFlagPlacementMode" .= (gameState ^. isFlagPlacementMode)
+            , "isChordMode"         .= (gameState ^. isChordMode)
             ]
 
 instance FromJSON GameState where
@@ -55,6 +58,7 @@ instance FromJSON GameState where
             <*> v .: "openedCells"
             <*> v .: "flaggedCells"
             <*> v .: "isFlagPlacementMode"
+            <*> v .: "isChordMode"
 
     parseJSON _ = mzero
 
@@ -70,4 +74,5 @@ initialGameState difficulty =
         , _openedCells         = []
         , _flaggedCells        = []
         , _isFlagPlacementMode = False
+        , _isChordMode         = False
         }
