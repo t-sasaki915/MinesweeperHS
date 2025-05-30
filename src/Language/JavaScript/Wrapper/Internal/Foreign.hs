@@ -13,6 +13,7 @@ module Language.JavaScript.Wrapper.Internal.Foreign
     , getElementById_
     , addLeftClickEventListener_
     , addRightClickEventListener_
+    , removeAllChildren_
     , getURLSearchParam_
     , randomInt_
     ) where
@@ -61,6 +62,9 @@ foreign import javascript "((listener, element) => element.addEventListener('cli
 
 foreign import javascript "((listener, element) => element.addEventListener('contextmenu', (e) => { e.preventDefault(); listener(); }))"
     addRightClickEventListener_ :: Callback (IO ()) -> JSVal -> IO ()
+
+foreign import javascript "((element) => element.textContent = '')"
+    removeAllChildren_ :: JSVal -> IO ()
 
 foreign import javascript "((paramName) => new URLSearchParams(document.location.search).get(paramName))"
     getURLSearchParam_ :: JSVal -> IO JSVal

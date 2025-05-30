@@ -10,6 +10,7 @@ module Language.JavaScript.Wrapper.ElementWrapper
     , setIsElementSelected
     , appendChild
     , getElementById
+    , removeAllChildren
     ) where
 
 import           Data.Functor                                 ((<&>))
@@ -57,3 +58,6 @@ appendChild (Element parent) (Element child) = appendChild_ parent child
 
 getElementById :: Text -> IO Element
 getElementById elementId = getElementById_ (toJSString $ unpack elementId) <&> Element
+
+removeAllChildren :: Element -> IO ()
+removeAllChildren (Element element) = removeAllChildren_ element

@@ -8,6 +8,7 @@ module GameState
     , cellsWithMine
     , openedCells
     , flaggedCells
+    , isFlagPlacementMode
     , initialGameState
     ) where
 
@@ -21,12 +22,13 @@ import           GameCell                      (GameCell)
 import           GameDifficulty                (GameDifficulty)
 
 data GameState = GameState
-    { _isGameStarted  :: Bool
-    , _isGameOver     :: Bool
-    , _gameDifficulty :: GameDifficulty
-    , _cellsWithMine  :: [GameCell]
-    , _openedCells    :: [GameCell]
-    , _flaggedCells   :: [GameCell]
+    { _isGameStarted       :: Bool
+    , _isGameOver          :: Bool
+    , _gameDifficulty      :: GameDifficulty
+    , _cellsWithMine       :: [GameCell]
+    , _openedCells         :: [GameCell]
+    , _flaggedCells        :: [GameCell]
+    , _isFlagPlacementMode :: Bool
     } deriving Show
 
 makeLenses ''GameState
@@ -34,12 +36,13 @@ makeLenses ''GameState
 instance ToJSON GameState where
     toJSON gameState =
         object
-            [ "isGameStarted"  .= (gameState ^. isGameStarted)
-            , "isGameOver"     .= (gameState ^. isGameOver)
-            , "gameDifficulty" .= (gameState ^. gameDifficulty)
-            , "cellsWithMine"  .= (gameState ^. cellsWithMine)
-            , "openedCells"    .= (gameState ^. openedCells)
-            , "flaggedCells"   .= (gameState ^. flaggedCells)
+            [ "isGameStarted"       .= (gameState ^. isGameStarted)
+            , "isGameOver"          .= (gameState ^. isGameOver)
+            , "gameDifficulty"      .= (gameState ^. gameDifficulty)
+            , "cellsWithMine"       .= (gameState ^. cellsWithMine)
+            , "openedCells"         .= (gameState ^. openedCells)
+            , "flaggedCells"        .= (gameState ^. flaggedCells)
+            , "isFlagPlacementMode" .= (gameState ^. isFlagPlacementMode)
             ]
 
 instance FromJSON GameState where
@@ -51,6 +54,7 @@ instance FromJSON GameState where
             <*> v .: "cellsWithMine"
             <*> v .: "openedCells"
             <*> v .: "flaggedCells"
+            <*> v .: "isFlagPlacementMode"
 
     parseJSON _ = mzero
 
@@ -59,10 +63,11 @@ instance AppState GameState
 initialGameState :: GameDifficulty -> GameState
 initialGameState difficulty =
     GameState
-        { _isGameStarted  = False
-        , _isGameOver     = False
-        , _gameDifficulty = difficulty
-        , _cellsWithMine  = []
-        , _openedCells    = []
-        , _flaggedCells   = []
+        { _isGameStarted       = False
+        , _isGameOver          = False
+        , _gameDifficulty      = difficulty
+        , _cellsWithMine       = []
+        , _openedCells         = []
+        , _flaggedCells        = []
+        , _isFlagPlacementMode = False
         }

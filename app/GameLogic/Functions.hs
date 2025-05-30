@@ -2,6 +2,9 @@ module GameLogic.Functions
     ( isGameRunning
     , canStartGame
     , isGameCleared
+    , isGameInFlagPlacementMode
+    , enterFlagPlacementMode
+    , exitFlagPlacementMode
     , isCellOpened
     , isCellFlagged
     , isCellMine
@@ -14,16 +17,21 @@ module GameLogic.Functions
     , applyOpenedCellTexture
     , applyNumberTextureToCell
     , applyFlagTextureToCell
+    , applyFlagPlaceholderTextureToCell
     , removeFlagTextureFromCell
+    , removeFlagPlaceholderTextureFromCell
     , appendToOpenedCells
     , appendToFlaggedCells
     , removeFromFlaggedCells
+    , showFlagPlaceholders
+    , hideFlagPlaceholders
+    , updateFlagPlacementModeButtonText
     , aroundCells'
     ) where
 
 import           Control.Lens                     (over, set, (^.))
 import           Control.Monad                    (forM_)
-import           Control.Monad.Extra              (unlessM)
+import           Control.Monad.Extra              (orM, unlessM)
 import           Control.Monad.Trans.Class        (lift)
 import           Control.Monad.Trans.State.Strict (StateT, get, put)
 import           Data.List.Extra                  (cons)
@@ -51,6 +59,15 @@ isGameCleared = get >>= \state ->
             height = screenHeight difficulty
             numOfMines = numberOfMines difficulty in
                 return $ length (state ^. openedCells) >= ((width * height) - numOfMines)
+
+isGameInFlagPlacementMode :: Monad m => StateT GameState m Bool
+isGameInFlagPlacementMode = get >>= \state -> return $ state ^. isFlagPlacementMode
+
+enterFlagPlacementMode :: Monad m => StateT GameState m ()
+enterFlagPlacementMode = get >>= put . set isFlagPlacementMode True
+
+exitFlagPlacementMode :: Monad m => StateT GameState m ()
+exitFlagPlacementMode = get >>= put . set isFlagPlacementMode False
 
 isCellOpened :: Monad m => GameCell -> StateT GameState m Bool
 isCellOpened cell = get >>= \state -> return $ cell `elem` (state ^. openedCells)
@@ -101,8 +118,14 @@ applyNumberTextureToCell n = applyTextureToCell (numberOnCellClass n)
 applyFlagTextureToCell :: GameCell -> StateT GameState IO ()
 applyFlagTextureToCell = applyTextureToCell closedCellWithFlagClass
 
+applyFlagPlaceholderTextureToCell :: GameCell -> StateT GameState IO ()
+applyFlagPlaceholderTextureToCell = applyTextureToCell closedCellWithFlagPlaceholderClass
+
 removeFlagTextureFromCell :: GameCell -> StateT GameState IO ()
 removeFlagTextureFromCell = applyTextureToCell closedCellClass
+
+removeFlagPlaceholderTextureFromCell :: GameCell -> StateT GameState IO ()
+removeFlagPlaceholderTextureFromCell = applyTextureToCell closedCellClass
 
 appendToOpenedCells :: Monad m => GameCell -> StateT GameState m ()
 appendToOpenedCells cell = get >>= put . over openedCells (cons cell)
@@ -112,6 +135,32 @@ appendToFlaggedCells cell = get >>= put . over flaggedCells (cons cell)
 
 removeFromFlaggedCells :: Monad m => GameCell -> StateT GameState m ()
 removeFromFlaggedCells cell = get >>= put . over flaggedCells (filter (/= cell))
+
+showFlagPlaceholders :: StateT GameState IO ()
+showFlagPlaceholders = currentDifficulty >>= \difficulty ->
+    forM_ (allCells difficulty) $ \cell ->
+        unlessM (isCellFlagged cell `orM` isCellOpened cell) $
+            applyFlagPlaceholderTextureToCell cell
+
+hideFlagPlaceholders :: StateT GameState IO ()
+hideFlagPlaceholders = currentDifficulty >>= \difficulty ->
+    forM_ (allCells difficulty) $ \cell ->
+        unlessM (isCellFlagged cell `orM` isCellOpened cell) $
+            removeFlagPlaceholderTextureFromCell cell
+
+updateFlagPlacementModeButtonText :: StateT GameState IO ()
+updateFlagPlacementModeButtonText =
+    isGameInFlagPlacementMode >>= \flagPlacementMode -> do
+        buttonElem <- lift $ getElementById "flagPlacementModeButton"
+        if flagPlacementMode
+            then
+                lift $ removeAllChildren buttonElem >>
+                    createTextNode "Exit Flag Placement Mode" >>=
+                        appendChild buttonElem
+            else
+                lift $ removeAllChildren buttonElem >>
+                    createTextNode "Enter Flag Placement Mode" >>=
+                        appendChild buttonElem
 
 aroundCells' :: Monad m => GameCell -> StateT GameState m [GameCell]
 aroundCells' centre = currentDifficulty >>= \difficulty ->

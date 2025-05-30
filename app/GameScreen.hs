@@ -40,8 +40,11 @@ renderGameScreen difficulty = do
 
 renderGameButtons :: IO ()
 renderGameButtons = do
+    flagPlacementModeButton <- getElementById "flagPlacementModeButton"
+    addEventListener Click onFlagPlacementModeButtonClicked flagPlacementModeButton
+
     restartButton <- getElementById "restartButton"
-    addEventListener Click (onRestartButtonClicked) restartButton
+    addEventListener Click onRestartButtonClicked restartButton
 
 renderDifficultySelector :: GameDifficulty -> IO ()
 renderDifficultySelector currentDifficulty = do

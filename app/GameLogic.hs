@@ -1,6 +1,7 @@
 module GameLogic
     ( onGameCellClicked
     , onGameCellRightClicked
+    , onFlagPlacementModeButtonClicked
     , onRestartButtonClicked
     ) where
 
@@ -18,34 +19,35 @@ import           GameState                        (GameState)
 
 onGameCellClicked :: GameCell -> StateT GameState IO ()
 onGameCellClicked clickedCell = do
-    whenM isGameRunning $
-        unlessM (isCellOpened clickedCell `orM` isCellFlagged clickedCell) $ do
-            openCell clickedCell
+    isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
 
-    whenM canStartGame $ do
-        generatedMines <- generateMines clickedCell
-
-        startGame generatedMines
-        openCell clickedCell
-
-    whenM isGameRunning $
-        whenM isGameCleared $
-            clearSequence
+    if isGameInFlagPlacementMode'
+        then flagSequence clickedCell
+        else openSequence clickedCell
 
 onGameCellRightClicked :: GameCell -> StateT GameState IO ()
 onGameCellRightClicked clickedCell =
-    whenM isGameRunning $
-        unlessM (isCellOpened clickedCell) $ do
-            isCellFlagged' <- isCellFlagged clickedCell
+    unlessM isGameInFlagPlacementMode $
+        flagSequence clickedCell
 
-            if isCellFlagged'
-                then removeFlagTextureFromCell clickedCell >> removeFromFlaggedCells clickedCell
-                else applyFlagTextureToCell clickedCell >> appendToFlaggedCells clickedCell
+onFlagPlacementModeButtonClicked :: StateT GameState IO ()
+onFlagPlacementModeButtonClicked =
+    whenM isGameRunning $ do
+        isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
 
+        if isGameInFlagPlacementMode'
+            then do
+                exitFlagPlacementMode
+                hideFlagPlaceholders
+                updateFlagPlacementModeButtonText
+
+            else do
+                enterFlagPlacementMode
+                showFlagPlaceholders
+                updateFlagPlacementModeButtonText
 
 onRestartButtonClicked :: StateT GameState IO ()
-onRestartButtonClicked = lift $ refreshPage
-
+onRestartButtonClicked = lift refreshPage
 
 openCell :: GameCell -> StateT GameState IO ()
 openCell cell =
@@ -69,7 +71,6 @@ openCell cell =
             applyNumberTextureToCell numberOnCell cell
             appendToOpenedCells cell
 
-
 data GameCellStatus = MineCell
                     | SafeCell Int
                     deriving Eq
@@ -83,6 +84,43 @@ calculateCellStatus cell = do
         then return MineCell
         else filterM isCellMine around <&> SafeCell . length
 
+openSequence :: GameCell -> StateT GameState IO ()
+openSequence cell = do
+    whenM isGameRunning $
+        unlessM (isCellOpened cell `orM` isCellFlagged cell) $ do
+            openCell cell
+
+    whenM canStartGame $ do
+        generatedMines <- generateMines cell
+
+        startGame generatedMines
+        openCell cell
+
+    whenM isGameRunning $
+        whenM isGameCleared
+            clearSequence
+
+flagSequence :: GameCell -> StateT GameState IO ()
+flagSequence cell =
+    whenM isGameRunning $
+        unlessM (isCellOpened cell) $ do
+            isCellFlagged'             <- isCellFlagged cell
+            isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
+
+            if isCellFlagged'
+                then
+                    if isGameInFlagPlacementMode'
+                        then do
+                            applyFlagPlaceholderTextureToCell cell
+                            removeFromFlaggedCells cell
+
+                        else do
+                            removeFlagTextureFromCell cell
+                            removeFromFlaggedCells cell
+
+                else do
+                    applyFlagTextureToCell cell
+                    appendToFlaggedCells cell
 
 clearSequence :: StateT GameState IO ()
 clearSequence = do

@@ -6,9 +6,11 @@ module GameCell
     , openedCellClass
     , openedCellWithMineClass
     , closedCellWithFlagClass
+    , closedCellWithFlagPlaceholderClass
     , closedCellWithWrongFlagClass
     , cellId
     , aroundCells
+    , allCells
     ) where
 
 import           Control.Monad  (mzero)
@@ -36,6 +38,9 @@ openedCellWithMineClass = "gameCell openedCellWithMine"
 
 closedCellWithFlagClass :: Text
 closedCellWithFlagClass = "gameCell closedCellWithFlag"
+
+closedCellWithFlagPlaceholderClass :: Text
+closedCellWithFlagPlaceholderClass = "gameCell closedCellWithFlagPlaceholder"
 
 closedCellWithWrongFlagClass :: Text
 closedCellWithWrongFlagClass = "gameCell closedCellWithWrongFlag"
@@ -68,6 +73,12 @@ aroundCells difficulty (GameCell centreX centreY) = possibleCells difficulty
     , GameCell centreX       (centreY + 1)
     , GameCell (centreX + 1) (centreY + 1)
     ]
+
+allCells :: GameDifficulty -> [GameCell]
+allCells difficulty = concat $
+    flip map [1..(screenWidth difficulty)] $ \x ->
+        flip map [1..(screenHeight difficulty)] $ \y ->
+            GameCell x y
 
 possibleCells :: GameDifficulty -> [GameCell] -> [GameCell]
 possibleCells difficulty = filter isPossible

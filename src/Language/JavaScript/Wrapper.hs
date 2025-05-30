@@ -15,6 +15,7 @@ module Language.JavaScript.Wrapper
     , getElementById
     , addEventListener
     , addEventListenerNoState
+    , removeAllChildren
     , getURLSearchParam
     , randomInt
     , refreshPage
