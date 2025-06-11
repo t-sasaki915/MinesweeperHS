@@ -6,10 +6,9 @@ module GameScreen
     ) where
 
 import           Control.Monad               (forM_, when)
-import           Data.Text                   (pack)
+import           Data.String.Here            (i)
 import qualified Data.Text                   as Text
 import           Language.JavaScript.Wrapper
-import           Text.Printf                 (printf)
 
 import           GameCell                    (GameCell (..), cellId,
                                               closedCellClass)
@@ -56,7 +55,7 @@ renderDifficultySelector currentDifficulty = do
     forM_ allDifficulties $ \difficulty -> do
         optionElem <- createElement Option
         if difficulty /= defaultGameDifficulty
-            then setElementValue (pack $ printf "/?difficulty=%s" (show difficulty)) optionElem
+            then setElementValue [i|/?difficulty=${difficulty}|] optionElem
             else setElementValue "/" optionElem
         when (currentDifficulty == difficulty) $
             setIsElementSelected True optionElem

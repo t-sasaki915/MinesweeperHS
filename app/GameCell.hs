@@ -13,16 +13,16 @@ module GameCell
     , allCells
     ) where
 
-import           Control.Monad  (mzero)
-import           Data.Aeson     (FromJSON (..), ToJSON (..), Value (..), object,
-                                 (.:), (.=))
-import           Data.Text      (Text, pack)
-import           Text.Printf    (printf)
+import           Control.Monad    (mzero)
+import           Data.Aeson       (FromJSON (..), ToJSON (..), Value (..),
+                                   object, (.:), (.=))
+import           Data.String.Here (i)
+import           Data.Text        (Text)
 
-import           GameDifficulty (GameDifficulty, screenHeight, screenWidth)
+import           GameDifficulty   (GameDifficulty, screenHeight, screenWidth)
 
 numberOnCellClass :: Int -> Text
-numberOnCellClass = pack . printf "gameCell openedCellWithDigit%d"
+numberOnCellClass n = [i|gameCell openedCellWithDigit${n}|]
 
 hypocentreCellClass :: Text
 hypocentreCellClass = "gameCell hypocentreCell"
@@ -59,7 +59,7 @@ instance FromJSON GameCell where
     parseJSON _ = mzero
 
 cellId :: GameCell -> Text
-cellId (GameCell x y) = pack $ printf "gameCell_%d_%d" x y
+cellId (GameCell x y) = [i|gameCell_${x}_${y}|]
 
 aroundCells :: GameDifficulty -> GameCell -> [GameCell]
 aroundCells difficulty (GameCell centreX centreY) = possibleCells difficulty
