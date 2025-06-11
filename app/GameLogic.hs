@@ -20,17 +20,13 @@ import           GameLogic.MineGenerator          (generateMines)
 import           GameState                        (GameState)
 
 onGameCellClicked :: GameCell -> StateT GameState IO ()
-onGameCellClicked clickedCell = do
-    isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
-
-    if isGameInFlagPlacementMode'
-        then flagSequence clickedCell
-        else do
-            isGameInChordMode' <- isGameInChordMode
-
-            if isGameInChordMode'
-                then chordOpenSequence clickedCell
-                else openSequence clickedCell
+onGameCellClicked clickedCell =
+    isGameInFlagPlacementMode >>= \case
+        True  -> flagSequence clickedCell
+        False -> do
+            isGameInChordMode >>= \case
+                True  -> chordOpenSequence clickedCell
+                False -> openSequence clickedCell
 
             whenM isGameRunning $
                 whenM isGameCleared
@@ -53,22 +49,18 @@ onGameCellMiddleClicked clickedCell =
 onFlagPlacementModeButtonClicked :: StateT GameState IO ()
 onFlagPlacementModeButtonClicked =
     whenM isGameRunning $ do
-        isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
-
-        if isGameInFlagPlacementMode'
-            then exitFlagPlacementMode >> hideFlagPlaceholders
-            else enterFlagPlacementMode >> showFlagPlaceholders
+        isGameInFlagPlacementMode >>= \case
+            True  -> exitFlagPlacementMode >> hideFlagPlaceholders
+            False -> enterFlagPlacementMode >> showFlagPlaceholders
 
         updateFlagPlacementModeButtonText
 
 onChordModeButtonClicked :: StateT GameState IO ()
 onChordModeButtonClicked =
     whenM isGameRunning $ do
-        isGameInChordMode' <- isGameInChordMode
-
-        if isGameInChordMode'
-            then exitChordMode
-            else enterChordMode
+        isGameInChordMode >>= \case
+            True  -> exitChordMode
+            False -> enterChordMode
 
         updateChordModeButtonText
 
@@ -78,11 +70,8 @@ onRestartButtonClicked = lift refreshPage
 openCell :: GameCell -> StateT GameState IO ()
 openCell cell =
     calculateCellStatus cell >>= \case
-        MineCell -> do
-            revealMines
-            markWrongFlags
-            applyHypocentreTexture cell
-            gameOver
+        MineCell ->
+            gameOverSequence cell
 
         (SafeCell 0) -> do
             applyOpenedCellTexture cell
@@ -105,10 +94,9 @@ calculateCellStatus :: Monad m => GameCell -> StateT GameState m GameCellStatus
 calculateCellStatus cell = do
     around <- aroundCells' cell
 
-    isCellMine' <- isCellMine cell
-    if isCellMine'
-        then return MineCell
-        else filterM isCellMine around <&> SafeCell . length
+    isCellMine cell >>= \case
+        True  -> return MineCell
+        False -> filterM isCellMine around <&> SafeCell . length
 
 openSequence :: GameCell -> StateT GameState IO ()
 openSequence cell = do
@@ -140,22 +128,18 @@ flagSequence :: GameCell -> StateT GameState IO ()
 flagSequence cell =
     whenM isGameRunning $
         unlessM (isCellOpened cell) $ do
-            isCellFlagged' <- isCellFlagged cell
-
-            if isCellFlagged'
-                then do
-                    isGameInFlagPlacementMode' <- isGameInFlagPlacementMode
-
-                    if isGameInFlagPlacementMode'
-                        then do
+            isCellFlagged cell >>= \case
+                True ->
+                    isGameInFlagPlacementMode >>= \case
+                        True -> do
                             applyFlagPlaceholderTextureToCell cell
                             removeFromFlaggedCells cell
 
-                        else do
+                        False -> do
                             removeFlagTextureFromCell cell
                             removeFromFlaggedCells cell
 
-                else do
+                False -> do
                     applyFlagTextureToCell cell
                     appendToFlaggedCells cell
 
@@ -165,4 +149,11 @@ clearSequence :: StateT GameState IO ()
 clearSequence = do
     lift $ alert "CLEAR"
     revealMines
+    gameOver
+
+gameOverSequence :: GameCell -> StateT GameState IO ()
+gameOverSequence hypocentre = do
+    revealMines
+    markWrongFlags
+    applyHypocentreTexture hypocentre
     gameOver
