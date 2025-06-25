@@ -43,8 +43,8 @@ alert = alert_ . toJSString . unpack
 getURLSearchParam :: Text -> IO (Maybe Text)
 getURLSearchParam paramName =
     getURLSearchParam_ (toJSString $ unpack paramName) >>= \rawParam ->
-        if isNull rawParam then return Nothing
-                           else return $ Just (pack $ fromJSString rawParam)
+        if isNull rawParam then pure Nothing
+                           else pure $ Just (pack $ fromJSString rawParam)
 
 randomInt :: Int -> Int -> IO Int
 randomInt = randomInt_

@@ -95,7 +95,7 @@ calculateCellStatus cell = do
     around <- aroundCells' cell
 
     isCellMine cell >>= \case
-        True  -> return MineCell
+        True  -> pure MineCell
         False -> filterM isCellMine around <&> SafeCell . length
 
 openSequence :: GameCell -> StateT GameState IO ()

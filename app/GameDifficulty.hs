@@ -26,10 +26,10 @@ instance ToJSON GameDifficulty where
     toJSON Impossible   = String "Impossible"
 
 instance FromJSON GameDifficulty where
-    parseJSON (String "Easy")         = return Easy
-    parseJSON (String "Intermediate") = return Intermediate
-    parseJSON (String "Hard")         = return Hard
-    parseJSON (String "Impossible")   = return Impossible
+    parseJSON (String "Easy")         = pure Easy
+    parseJSON (String "Intermediate") = pure Intermediate
+    parseJSON (String "Hard")         = pure Hard
+    parseJSON (String "Impossible")   = pure Impossible
 
     parseJSON _                       = mzero
 

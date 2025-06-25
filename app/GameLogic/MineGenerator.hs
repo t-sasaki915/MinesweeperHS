@@ -22,7 +22,7 @@ generateMines firstCell = do
         generateMines' :: GameDifficulty -> [GameCell] -> [GameCell] -> IO [GameCell]
         generateMines' difficulty safeSpaces generatedMines
             | length generatedMines == numberOfMines difficulty =
-                return generatedMines
+                pure generatedMines
 
             | otherwise = do
                 randomX <- randomInt 1 (screenWidth difficulty)

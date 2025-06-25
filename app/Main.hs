@@ -13,9 +13,9 @@ main :: IO ()
 main = do
     difficulty <-
         getURLSearchParam "difficulty" >>= \case
-            Nothing -> return defaultGameDifficulty
+            Nothing -> pure defaultGameDifficulty
             Just txt ->
-                return $ fromMaybe defaultGameDifficulty (gameDifficultyFromText txt)
+                pure $ fromMaybe defaultGameDifficulty (gameDifficultyFromText txt)
 
     initialiseAppState (initialGameState difficulty)
 

@@ -52,11 +52,11 @@ import           GameState
 
 isGameRunning :: Monad m => StateT GameState m Bool
 isGameRunning = get >>= \state ->
-    return $ (state ^. isGameStarted) && not (state ^. isGameOver)
+    pure $ (state ^. isGameStarted) && not (state ^. isGameOver)
 
 canStartGame :: Monad m => StateT GameState m Bool
 canStartGame = get >>= \state ->
-    return $ not (state ^. isGameStarted) && not (state ^. isGameOver)
+    pure $ not (state ^. isGameStarted) && not (state ^. isGameOver)
 
 isGameCleared :: Monad m => StateT GameState m Bool
 isGameCleared = get >>= \state ->
@@ -64,13 +64,13 @@ isGameCleared = get >>= \state ->
         let width = screenWidth difficulty
             height = screenHeight difficulty
             numOfMines = numberOfMines difficulty in
-                return $ length (state ^. openedCells) >= ((width * height) - numOfMines)
+                pure $ length (state ^. openedCells) >= ((width * height) - numOfMines)
 
 isGameInFlagPlacementMode :: Monad m => StateT GameState m Bool
-isGameInFlagPlacementMode = get >>= \state -> return $ state ^. isFlagPlacementMode
+isGameInFlagPlacementMode = get >>= \state -> pure $ state ^. isFlagPlacementMode
 
 isGameInChordMode :: Monad m => StateT GameState m Bool
-isGameInChordMode = get >>= \state -> return $ state ^. isChordMode
+isGameInChordMode = get >>= \state -> pure $ state ^. isChordMode
 
 enterFlagPlacementMode :: Monad m => StateT GameState m ()
 enterFlagPlacementMode = get >>= put . set isFlagPlacementMode True
@@ -85,16 +85,16 @@ exitChordMode :: Monad m => StateT GameState m ()
 exitChordMode = get >>= put . set isChordMode False
 
 isCellOpened :: Monad m => GameCell -> StateT GameState m Bool
-isCellOpened cell = get >>= \state -> return $ cell `elem` (state ^. openedCells)
+isCellOpened cell = get >>= \state -> pure $ cell `elem` (state ^. openedCells)
 
 isCellFlagged :: Monad m => GameCell -> StateT GameState m Bool
-isCellFlagged cell = get >>= \state -> return $ cell `elem` (state ^. flaggedCells)
+isCellFlagged cell = get >>= \state -> pure $ cell `elem` (state ^. flaggedCells)
 
 isCellMine :: Monad m => GameCell -> StateT GameState m Bool
-isCellMine cell = get >>= \state -> return $ cell `elem` (state ^. cellsWithMine)
+isCellMine cell = get >>= \state -> pure $ cell `elem` (state ^. cellsWithMine)
 
 currentDifficulty :: Monad m => StateT GameState m GameDifficulty
-currentDifficulty = get >>= \state -> return $ state ^. gameDifficulty
+currentDifficulty = get >>= \state -> pure $ state ^. gameDifficulty
 
 gameOver :: Monad m => StateT GameState m ()
 gameOver = get >>= put . set isGameOver True
@@ -201,4 +201,4 @@ updateRemainingMinesLabel = get >>= \state ->
 
 aroundCells' :: Monad m => GameCell -> StateT GameState m [GameCell]
 aroundCells' centre = currentDifficulty >>= \difficulty ->
-    return $ aroundCells difficulty centre
+    pure $ aroundCells difficulty centre
