@@ -15,7 +15,7 @@ import           Data.Functor                     ((<&>))
 import           Language.JavaScript.Wrapper
 
 import           GameCell                         (GameCell)
-import           GameLogic.Functions
+import           GameLogic.Internal
 import           GameLogic.MineGenerator          (generateMines)
 import           GameState                        (GameState)
 

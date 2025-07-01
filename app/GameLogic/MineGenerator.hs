@@ -8,7 +8,7 @@ import           GameCell                         (GameCell (..))
 import           GameDifficulty                   (GameDifficulty,
                                                    numberOfMines, screenHeight,
                                                    screenWidth)
-import           GameLogic.Functions              (aroundCells',
+import           GameLogic.Internal               (aroundCells',
                                                    currentDifficulty)
 import           GameState                        (GameState)
 

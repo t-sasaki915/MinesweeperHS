@@ -1,4 +1,4 @@
-module GameLogic.Functions
+module GameLogic.Internal
     ( isGameRunning
     , canStartGame
     , isGameCleared
