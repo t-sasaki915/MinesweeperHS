@@ -1,6 +1,6 @@
 BUILD_DIR := build
 
-.PHONY: build copy-statics clean
+.PHONY: build http copy-statics clean
 
 build: copy-statics
 	mkdir -p $(BUILD_DIR)
