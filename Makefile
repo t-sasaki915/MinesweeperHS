@@ -1,26 +1,34 @@
+BUILD_DIR := build
+
 .PHONY: build copy-statics clean
 
-build: $(SRC_APP)
-	mkdir -p build
+build:
+	mkdir -p $(BUILD_DIR)
 
 	cabal build
-	cp -v $(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js build/index.js
+	cp -v $(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js $(BUILD_DIR)/index.js
 	
 	$(MAKE) copy-statics
 
 	@echo ""
 	@echo "BUILD SUCCESSFUL."
 
-copy-statics: Setup.hs
-	mkdir -p build
+http:
+	$(MAKE) build
 
-	cp -v -r static/* build
+	http-server $(BUILD_DIR)
+
+copy-statics:
+	mkdir -p $(BUILD_DIR)
+
+	cp -v -r static/* $(BUILD_DIR)
 
 	@echo ""
 	@echo "COPY-STATICS SUCCESSFUL."
 
 clean:
-	rm -rf build
+	cabal clean
+	rm -rf $(BUILD_DIR)
 
 	@echo ""
 	@echo "CLEAN SUCCESSFUL."
