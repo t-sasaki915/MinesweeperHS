@@ -60,8 +60,7 @@ jobs:
 
           cabal update
 
-          chmod +x build.sh
-          ./build.sh
+          make
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
