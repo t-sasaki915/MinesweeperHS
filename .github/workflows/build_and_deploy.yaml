@@ -58,7 +58,7 @@ jobs:
         run: |
           source ~/.ghcup/env
 
-          cabal update
+          cabal v2-update
 
           make
       - name: Upload artifact

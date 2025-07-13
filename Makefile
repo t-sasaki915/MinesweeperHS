@@ -5,7 +5,7 @@ BUILD_DIR := build
 build: copy-statics
 	mkdir -p $(BUILD_DIR)
 
-	cabal build
+	cabal v2-build
 	cp -v $(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js $(BUILD_DIR)/index.js
 
 	@echo ""
@@ -25,7 +25,7 @@ copy-statics:
 	@echo ""
 
 clean:
-	cabal clean
+	cabal v2-clean
 	rm -rf $(BUILD_DIR)
 
 	@echo ""
