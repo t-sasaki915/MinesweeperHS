@@ -2,20 +2,17 @@ BUILD_DIR := build
 
 .PHONY: build copy-statics clean
 
-build:
+build: copy-statics
 	mkdir -p $(BUILD_DIR)
 
 	cabal build
 	cp -v $(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js $(BUILD_DIR)/index.js
-	
-	$(MAKE) copy-statics
 
 	@echo ""
 	@echo "BUILD SUCCESSFUL."
+	@echo ""
 
-http:
-	$(MAKE) build
-
+http: build
 	http-server $(BUILD_DIR)
 
 copy-statics:
@@ -25,6 +22,7 @@ copy-statics:
 
 	@echo ""
 	@echo "COPY-STATICS SUCCESSFUL."
+	@echo ""
 
 clean:
 	cabal clean
@@ -32,3 +30,4 @@ clean:
 
 	@echo ""
 	@echo "CLEAN SUCCESSFUL."
+	@echo ""
