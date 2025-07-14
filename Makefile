@@ -1,4 +1,5 @@
 BUILD_DIR := build
+SHELL     := /bin/bash
 
 .PHONY: build http copy-statics clean init-env
 
