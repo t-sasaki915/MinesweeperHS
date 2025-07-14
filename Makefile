@@ -1,12 +1,13 @@
 BUILD_DIR := build
 
-.PHONY: build http copy-statics clean
+.PHONY: build http copy-statics clean init-env
 
 build: copy-statics
 	mkdir -p $(BUILD_DIR)
 
 	cabal v2-build
-	cp -v $(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js $(BUILD_DIR)/index.js
+
+	node-minify --compressor uglify-js --input '$(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js' --output '$(BUILD_DIR)/index.js'
 
 	@echo ""
 	@echo "BUILD SUCCESSFUL."
@@ -30,4 +31,36 @@ clean:
 
 	@echo ""
 	@echo "CLEAN SUCCESSFUL."
+	@echo ""
+
+init-env:
+ifeq (, $(shell which npm))
+	$(error Please install npm)
+endif
+	
+	@echo "Requirements are listed at https://www.haskell.org/ghcup/install/#system-requirements."
+
+	export BOOTSTRAP_HASKELL_NONINTERACTIVE=1
+	export BOOTSTRAP_HASKELL_MINIMAL=1
+	export BOOTSTRAP_HASKELL_ADJUST_BASHRC=1
+	curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
+
+	source ~/.bashrc
+
+	ghcup install cabal 3.14.2.0
+
+	git clone https://github.com/emscripten-core/emsdk.git ~/emsdk
+	~/emsdk/emsdk install 3.1.74
+	~/emsdk/emsdk activate 3.1.74
+	source ~/emsdk/emsdk_env.sh
+
+	ghcup config add-release-channel cross
+	emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2
+
+	source ~/.bashrc
+
+	sudo npm install -g @node-minify/cli @node-minify/uglify-js
+
+	@echo ""
+	@echo "INIT-ENV SUCCESSFUL."
 	@echo ""

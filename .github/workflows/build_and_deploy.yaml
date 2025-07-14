@@ -24,7 +24,7 @@ jobs:
       - name: Install requirements
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential
+          sudo apt-get install -y build-essential npm
       - name: Setup ghcup
         run: |
           export BOOTSTRAP_HASKELL_NONINTERACTIVE=1
@@ -43,6 +43,8 @@ jobs:
 
           ghcup config add-release-channel cross
           emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2
+
+          sudo npm install -g @node-minify/cli @node-minify/uglify-js
       - name: Cache .cabal
         uses: actions/cache@v4.2.3
         env:
