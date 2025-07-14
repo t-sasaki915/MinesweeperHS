@@ -15,6 +15,10 @@ build: copy-statics
 	@echo ""
 
 http: build
+ifeq (, $(shell which http-server))
+	sudo npm install -g http-server
+endif
+
 	http-server $(BUILD_DIR)
 
 copy-statics:
@@ -52,13 +56,9 @@ endif
 	git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
 	~/.emsdk/emsdk install 3.1.74
 	~/.emsdk/emsdk activate 3.1.74
-	echo "" >> ~/.bashrc
-	echo "export EMSDK_QUIET=1"
-	echo "source ~/.emsdk/emsdk_env.sh" >> ~/.bashrc
-	echo "" >> ~/.bashrc
 
 	bash -c "source ~/.bashrc && ghcup config add-release-channel cross"
-	bash -c "source ~/.bashrc && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
+	bash -c "source ~/.bashrc && source ~/.emsdk/emsdk_env.sh && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
 
 	sudo npm install -g @node-minify/cli @node-minify/uglify-js
 
