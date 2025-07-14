@@ -41,9 +41,9 @@ ifeq (, $(shell which curl))
 	$(error Please install curl)
 endif
 	
-	BOOTSTRAP_HASKELL_NONINTERACTIVE=1 \
-	BOOTSTRAP_HASKELL_MINIMAL=1 \
-	BOOTSTRAP_HASKELL_ADJUST_BASHRC=1 \
+	export BOOTSTRAP_HASKELL_NONINTERACTIVE=1; \
+	export BOOTSTRAP_HASKELL_MINIMAL=1; \
+	export BOOTSTRAP_HASKELL_ADJUST_BASHRC=1; \
 	curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
 	ghcup install cabal 3.14.2.0
