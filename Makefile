@@ -53,6 +53,7 @@ endif
 	~/.emsdk/emsdk install 3.1.74
 	~/.emsdk/emsdk activate 3.1.74
 	echo "" >> ~/.bashrc
+	echo "export EMSDK_QUIET=1"
 	echo "source ~/.emsdk/emsdk_env.sh" >> ~/.bashrc
 	echo "" >> ~/.bashrc
 
