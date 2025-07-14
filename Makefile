@@ -1,5 +1,8 @@
-BUILD_DIR := build
-SHELL     := /bin/bash
+SHELL         := /bin/bash
+BUILD_DIR     := build
+CABAL_VERSION := 3.14.2.0
+GHC_VERSION   := 9.12.2
+EMSDK_VERSION := 3.1.74
 
 .PHONY: build debug copy-statics clean init-env
 
@@ -51,14 +54,14 @@ endif
 	export BOOTSTRAP_HASKELL_ADJUST_BASHRC=1; \
 	curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
-	bash -c "source ~/.ghcup/env && ghcup install cabal 3.14.2.0"
+	bash -c "source ~/.ghcup/env && ghcup install cabal $(CABAL_VERSION)"
 
 	git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
-	~/.emsdk/emsdk install 3.1.74
-	~/.emsdk/emsdk activate 3.1.74
+	~/.emsdk/emsdk install $(EMSDK_VERSION)
+	~/.emsdk/emsdk activate $(EMSDK_VERSION)
 
 	bash -c "source ~/.ghcup/env && ghcup config add-release-channel cross"
-	bash -c "source ~/.ghcup/env && source ~/.emsdk/emsdk_env.sh && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
+	bash -c "source ~/.ghcup/env && source ~/.emsdk/emsdk_env.sh && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-$(GHC_VERSION)"
 
 	sudo npm install -g @node-minify/cli @node-minify/uglify-js
 
