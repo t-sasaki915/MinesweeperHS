@@ -1,7 +1,7 @@
 BUILD_DIR := build
 SHELL     := /bin/bash
 
-.PHONY: build http copy-statics clean init-env
+.PHONY: build debug copy-statics clean init-env
 
 build: copy-statics
 	mkdir -p $(BUILD_DIR)
@@ -14,7 +14,7 @@ build: copy-statics
 	@echo "BUILD SUCCESSFUL."
 	@echo ""
 
-http: build
+debug: build
 ifeq (, $(shell which http-server))
 	sudo npm install -g http-server
 endif
@@ -64,4 +64,5 @@ endif
 
 	@echo ""
 	@echo "INIT-ENV SUCCESSFUL."
+	@echo "Please run 'source ~/.bashrc' before 'make'."
 	@echo ""
