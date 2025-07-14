@@ -52,7 +52,9 @@ endif
 	git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
 	~/.emsdk/emsdk install 3.1.74
 	~/.emsdk/emsdk activate 3.1.74
+	echo "" >> ~/.bashrc
 	echo "source ~/.emsdk/emsdk_env.sh" >> ~/.bashrc
+	echo "" >> ~/.bashrc
 
 	bash -c "source ~/.bashrc && ghcup config add-release-channel cross"
 	bash -c "source ~/.bashrc && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
