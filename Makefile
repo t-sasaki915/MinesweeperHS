@@ -49,14 +49,13 @@ endif
 
 	bash -c "source ~/.bashrc && ghcup install cabal 3.14.2.0"
 
-	git clone https://github.com/emscripten-core/emsdk.git ~/emsdk
-	~/emsdk/emsdk install 3.1.74
-	~/emsdk/emsdk activate 3.1.74
-	source ~/emsdk/emsdk_env.sh
-	rm -rf ~/emsdk
+	git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
+	~/.emsdk/emsdk install 3.1.74
+	~/.emsdk/emsdk activate 3.1.74
+	echo "source ~/.emsdk/emsdk_env.sh" >> ~/.bashrc
 
-	ghcup config add-release-channel cross
-	emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2
+	bash -c "source ~/.bashrc && ghcup config add-release-channel cross"
+	bash -c "source ~/.bashrc && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
 
 	sudo npm install -g @node-minify/cli @node-minify/uglify-js
 
