@@ -4,7 +4,7 @@ CABAL_VERSION := 3.14.2.0
 GHC_VERSION   := 9.12.2
 EMSDK_VERSION := 3.1.74
 
-.PHONY: build debug copy-statics clean init-env
+.PHONY: build debug copy-statics clean init-tools
 
 build: copy-statics
 	mkdir -p $(BUILD_DIR)
@@ -41,7 +41,7 @@ clean:
 	@echo "CLEAN SUCCESSFUL."
 	@echo ""
 
-init-env:
+init-tools:
 ifeq (, $(shell which npm))
 	$(error Please install npm)
 endif

@@ -25,8 +25,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential npm
-      - name: Initialise environment
-        run: sudo make init-env
+      - name: Install tools
+        run: make init-tools
       - name: Cache .cabal
         uses: actions/cache@v4.2.3
         env:
