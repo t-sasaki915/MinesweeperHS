@@ -4,14 +4,22 @@ CABAL_VERSION := 3.14.2.0
 GHC_VERSION   := 9.12.2
 EMSDK_VERSION := 3.1.74
 
-.PHONY: build debug copy-statics clean init-tools
+.PHONY: build debug clean init-tools
 
-build: copy-statics
+build:
 	mkdir -p $(BUILD_DIR)
+
+	cp -v -r static/* $(BUILD_DIR)
 
 	cabal v2-build
 
-	node-minify --compressor uglify-js --input '$(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js' --output '$(BUILD_DIR)/index.js'
+	@INPUT_JS=$(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js && \
+	OUTPUT_JS="$(BUILD_DIR)/index.js" && \
+	if [ "$(PRODUCTION)" = "1" ]; then \
+		node-minify --compressor uglify-js --input "$$INPUT_JS" --output "$$OUTPUT_JS"; \
+	else \
+		cp -v "$$INPUT_JS" "$$OUTPUT_JS"; \
+	fi
 
 	@echo ""
 	@echo "BUILD SUCCESSFUL."
@@ -23,15 +31,6 @@ ifeq (, $(shell which http-server))
 endif
 
 	http-server $(BUILD_DIR)
-
-copy-statics:
-	mkdir -p $(BUILD_DIR)
-
-	cp -v -r static/* $(BUILD_DIR)
-
-	@echo ""
-	@echo "COPY-STATICS SUCCESSFUL."
-	@echo ""
 
 clean:
 	cabal v2-clean
