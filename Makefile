@@ -47,7 +47,7 @@ endif
 	export BOOTSTRAP_HASKELL_ADJUST_BASHRC=1; \
 	curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
-	ghcup install cabal 3.14.2.0
+	bash -c "source ~/.bashrc && ghcup install cabal 3.14.2.0"
 
 	git clone https://github.com/emscripten-core/emsdk.git ~/emsdk
 	~/emsdk/emsdk install 3.1.74
