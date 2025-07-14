@@ -51,14 +51,14 @@ endif
 	export BOOTSTRAP_HASKELL_ADJUST_BASHRC=1; \
 	curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
 
-	bash -c "source ~/.bashrc && ghcup install cabal 3.14.2.0"
+	bash -c "source ~/.ghcup/env && ghcup install cabal 3.14.2.0"
 
 	git clone https://github.com/emscripten-core/emsdk.git ~/.emsdk
 	~/.emsdk/emsdk install 3.1.74
 	~/.emsdk/emsdk activate 3.1.74
 
-	bash -c "source ~/.bashrc && ghcup config add-release-channel cross"
-	bash -c "source ~/.bashrc && source ~/.emsdk/emsdk_env.sh && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
+	bash -c "source ~/.ghcup/env && ghcup config add-release-channel cross"
+	bash -c "source ~/.ghcup/env && source ~/.emsdk/emsdk_env.sh && emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2"
 
 	sudo npm install -g @node-minify/cli @node-minify/uglify-js
 
