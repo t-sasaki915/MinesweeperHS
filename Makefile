@@ -37,15 +37,14 @@ init-env:
 ifeq (, $(shell which npm))
 	$(error Please install npm)
 endif
+ifeq (, $(shell which curl))
+	$(error Please install curl)
+endif
 	
-	@echo "Requirements are listed at https://www.haskell.org/ghcup/install/#system-requirements."
-
-	export BOOTSTRAP_HASKELL_NONINTERACTIVE=1
-	export BOOTSTRAP_HASKELL_MINIMAL=1
-	export BOOTSTRAP_HASKELL_ADJUST_BASHRC=1
+	BOOTSTRAP_HASKELL_NONINTERACTIVE=1 \
+	BOOTSTRAP_HASKELL_MINIMAL=1 \
+	BOOTSTRAP_HASKELL_ADJUST_BASHRC=1 \
 	curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
-
-	source ~/.bashrc
 
 	ghcup install cabal 3.14.2.0
 
@@ -53,11 +52,10 @@ endif
 	~/emsdk/emsdk install 3.1.74
 	~/emsdk/emsdk activate 3.1.74
 	source ~/emsdk/emsdk_env.sh
+	rm -rf ~/emsdk
 
 	ghcup config add-release-channel cross
 	emconfigure ghcup install ghc --set javascript-unknown-ghcjs-9.12.2
-
-	source ~/.bashrc
 
 	sudo npm install -g @node-minify/cli @node-minify/uglify-js
 
