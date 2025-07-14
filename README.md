@@ -21,5 +21,5 @@ make # or 'make build'
 ```
 ## Debug
 ```bash
-make debug
+make debug # This runs 'make' as well. Run 'make debug' instead of 'make && make debug'.
 ```
