@@ -13,7 +13,7 @@ build:
 
 	cabal v2-build
 
-	@INPUT_JS=$(shell dirname $$(cabal list-bin MinesweeperHS-exe))/MinesweeperHS-exe.jsexe/all.js && \
+	@INPUT_JS=$(shell cabal list-bin MinesweeperHS-exe).jsexe/all.js && \
 	OUTPUT_JS="$(BUILD_DIR)/index.js" && \
 	if [ "$(PRODUCTION)" = "1" ]; then \
 		node-minify --compressor uglify-js --input "$$INPUT_JS" --output "$$OUTPUT_JS"; \
