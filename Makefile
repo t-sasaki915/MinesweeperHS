@@ -2,7 +2,7 @@ BUILD_DIR := build
 
 SHELL := /bin/bash
 
-.PHONY: build debug clean init-tools
+.PHONY: build debug clean update init-tools
 
 build:
 	mkdir -p $(BUILD_DIR)
@@ -36,6 +36,13 @@ clean:
 
 	@echo ""
 	@echo "CLEAN SUCCESSFUL."
+	@echo ""
+
+update:
+	cabal v2-update
+
+	@echo ""
+	@echo "UPDATE SUCCESSFUL."
 	@echo ""
 
 init-tools:
