@@ -53,8 +53,8 @@ ifeq (, $(shell which curl))
 	$(error Please install curl)
 endif
 	
-	make -f <(curl -fsSL https://t-sasaki.net/hs-makefiles/0.1.0.0/ghc/javascript-unknown-ghcjs-ghc)
-	make -f <(curl -fsSL https://t-sasaki.net/hs-makefiles/0.1.0.0/utils/haskell-tools) ONLY_CABAL=1
+	make -f <(curl https://t-sasaki.net/hs-makefiles/0.1.0.0/ghc/javascript-unknown-ghcjs-ghc)
+	make -f <(curl https://t-sasaki.net/hs-makefiles/0.1.0.0/utils/haskell-tools) ONLY_CABAL=1
 
 	sudo npm install -g @node-minify/cli @node-minify/uglify-js
 
